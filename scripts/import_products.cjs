@@ -36,7 +36,6 @@ function parseCSV(text) {
 
 const rows = parseCSV(content);
 const headers = rows[0].map(h => h.trim());
-console.log('Headers:', headers.length);
 
 const records = [];
 for (let i = 1; i < rows.length; i++) {
@@ -52,9 +51,6 @@ for (let i = 1; i < rows.length; i++) {
 const parents = records.filter(r => r.Type !== 'variation');
 const variations = records.filter(r => r.Type === 'variation');
 
-console.log('Parents count:', parents.length);
-console.log('Variations count:', variations.length);
-
 // Group variations by parent ID
 const varByParent = {};
 for (const v of variations) {
@@ -64,22 +60,47 @@ for (const v of variations) {
   varByParent[parentId].push(v);
 }
 
-// Clean and structure products
+// Build category tree
+const categoryTree = {};
+const allCategoryPaths = new Set();
+
 const products = parents.map((p, idx) => {
   const id = p.ID || String(idx + 1);
   const vars = varByParent[id] || [];
 
-  // Parse images
+  // Parse all images
   const rawImages = (p.Images || '')
     .split(',')
     .map(u => u.trim())
     .filter(u => u.length > 0);
 
-  // Parse categories
-  const categories = (p.Categories || '')
+  // Featured main image is 1st image
+  const mainImage = rawImages[0] || 'https://images.unsplash.com/photo-1548839140-29a749e1bc4e?auto=format&fit=crop&w=800&q=80';
+  // Gallery images are all images or slice(1)
+  const galleryImages = rawImages.length > 1 ? rawImages.slice(1) : [];
+
+  // Parse categories with hierarchy
+  const rawCatList = (p.Categories || '')
     .split(',')
     .map(c => c.trim())
     .filter(c => c.length > 0);
+
+  rawCatList.forEach(cp => allCategoryPaths.add(cp));
+
+  const primaryCatPath = rawCatList[0] || 'Water Treatment';
+  const catParts = primaryCatPath.split('>').map(s => s.trim());
+  const parentCategory = catParts[0] || 'Water Treatment';
+  const childCategory = catParts.length > 1 ? catParts[1] : '';
+  const subCategory = catParts.length > 2 ? catParts[2] : '';
+
+  // Register in category tree
+  if (!categoryTree[parentCategory]) categoryTree[parentCategory] = {};
+  if (childCategory) {
+    if (!categoryTree[parentCategory][childCategory]) categoryTree[parentCategory][childCategory] = [];
+    if (subCategory && !categoryTree[parentCategory][childCategory].includes(subCategory)) {
+      categoryTree[parentCategory][childCategory].push(subCategory);
+    }
+  }
 
   // Compute pricing
   let regularPrice = parseFloat(p['Regular price']) || 0;
@@ -101,29 +122,6 @@ const products = parents.map((p, idx) => {
     }
   }
 
-  // Parse primary category for filtering
-  let mainCategory = 'Water Treatment';
-  if (categories.length > 0) {
-    const firstCat = categories[0];
-    if (firstCat.toLowerCase().includes('industrial ro')) {
-      mainCategory = 'Industrial RO';
-    } else if (firstCat.toLowerCase().includes('domestic ro')) {
-      mainCategory = 'Domestic RO';
-    } else if (firstCat.toLowerCase().includes('softner') || firstCat.toLowerCase().includes('softener')) {
-      mainCategory = 'Water Softeners';
-    } else if (firstCat.toLowerCase().includes('spares') || firstCat.toLowerCase().includes('accessories') || firstCat.toLowerCase().includes('membrane')) {
-      mainCategory = 'Spares & Consumables';
-    } else if (firstCat.toLowerCase().includes('under sink')) {
-      mainCategory = 'Under Sink RO';
-    } else if (firstCat.toLowerCase().includes('dispenser')) {
-      mainCategory = 'Water Dispensers';
-    } else if (firstCat.toLowerCase().includes('vessel') || firstCat.toLowerCase().includes('frp')) {
-      mainCategory = 'FRP Vessels';
-    } else {
-      mainCategory = firstCat.split('>')[0].trim();
-    }
-  }
-
   // Attributes
   const attributes = [];
   for (let a = 1; a <= 5; a++) {
@@ -137,80 +135,83 @@ const products = parents.map((p, idx) => {
     }
   }
 
-  // Variations summary
-  const formattedVars = vars.map(v => ({
-    id: v.ID,
-    sku: v.SKU,
-    regularPrice: parseFloat(v['Regular price']) || 0,
-    salePrice: parseFloat(v['Sale price']) || 0,
-    inStock: v['In stock?'] === '1',
-    stock: parseInt(v.Stock) || 0,
-    attributes: {
-      attr1: v['Attribute 1 value(s)'],
-      attr2: v['Attribute 2 value(s)'],
-      attr3: v['Attribute 3 value(s)']
-    }
-  }));
+  // Format all variations so every single field is editable
+  const formattedVars = vars.map((v, vIdx) => {
+    const attr1Val = v['Attribute 1 value(s)'] || '';
+    const attr2Val = v['Attribute 2 value(s)'] || '';
+    const attr3Val = v['Attribute 3 value(s)'] || '';
+    
+    const attrLabel = [attr1Val, attr2Val, attr3Val].filter(Boolean).join(' | ') || `Option #${vIdx + 1}`;
 
-  // Strip html for clean preview
-  const cleanShortDesc = (p['Short description'] || '')
-    .replace(/<[^>]+>/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
+    return {
+      id: v.ID || `${id}-var-${vIdx + 1}`,
+      name: attrLabel,
+      sku: v.SKU || `${p.SKU || 'AAT'}-VAR-${vIdx + 1}`,
+      regularPrice: parseFloat(v['Regular price']) || regularPrice,
+      salePrice: parseFloat(v['Sale price']) || 0,
+      inStock: v['In stock?'] === '1' || v['In stock?'] === '',
+      stock: parseInt(v.Stock) || 10,
+      attributes: {
+        attr1: attr1Val,
+        attr2: attr2Val,
+        attr3: attr3Val
+      }
+    };
+  });
 
   return {
     id: id,
     name: p.Name,
     slug: p.Name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
-    type: p.Type,
-    sku: p.SKU || '',
-    category: mainCategory,
-    categories: categories,
+    type: vars.length > 0 ? 'variable' : (p.Type || 'simple'),
+    sku: p.SKU || `AAT-${id}`,
+    category: primaryCatPath,
+    parentCategory: parentCategory,
+    childCategory: childCategory,
+    categories: rawCatList.length > 0 ? rawCatList : [primaryCatPath],
     regularPrice: regularPrice,
     salePrice: salePrice,
     minPrice: minPrice,
     maxPrice: maxPrice,
     inStock: p['In stock?'] === '1' || p['In stock?'] === '',
-    stock: parseInt(p.Stock) || 0,
+    stock: parseInt(p.Stock) || 10,
     featured: p['Is featured?'] === '1',
-    published: p.Published === '1',
-    images: rawImages,
-    mainImage: rawImages[0] || 'https://images.unsplash.com/photo-1548839140-29a749e1bc4e?auto=format&fit=crop&w=800&q=80',
-    shortDescription: cleanShortDesc,
+    published: p.Published !== '0',
+    publishDate: '2026-09-30 11:30:00',
+    createdAt: '2026-06-15 10:00:00',
+    updatedAt: new Date().toISOString(),
+    mainImage: mainImage,
+    galleryImages: galleryImages,
+    images: rawImages.length > 0 ? rawImages : [mainImage],
+    shortDescription: p['Short description'] || '',
     description: p.Description || '',
     attributes: attributes,
     variationsCount: vars.length,
-    variations: formattedVars.slice(0, 20), // Top variations for quick inspection
+    variations: formattedVars,
     weight: p['Weight (kg)'] || '',
     dimensions: {
       length: p['Length (cm)'] || '',
       width: p['Width (cm)'] || '',
       height: p['Height (cm)'] || ''
-    },
-    updatedAt: new Date().toISOString()
+    }
   };
 });
 
-console.log('Successfully structured', products.length, 'products');
-
-// Save to backend/data/products.json
+// Save to backend/data/products.json and src/data/products.json
 const dataDir = path.join(__dirname, '../backend/data');
 if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
+fs.writeFileSync(path.join(dataDir, 'products.json'), JSON.stringify(products, null, 2), 'utf8');
 
-fs.writeFileSync(
-  path.join(dataDir, 'products.json'),
-  JSON.stringify(products, null, 2),
-  'utf8'
-);
-
-// Also copy to src/data/products.json for frontend bundling & instant offline fallback
 const srcDataDir = path.join(__dirname, '../src/data');
 if (!fs.existsSync(srcDataDir)) fs.mkdirSync(srcDataDir, { recursive: true });
+fs.writeFileSync(path.join(srcDataDir, 'products.json'), JSON.stringify(products, null, 2), 'utf8');
 
-fs.writeFileSync(
-  path.join(srcDataDir, 'products.json'),
-  JSON.stringify(products, null, 2),
-  'utf8'
-);
+// Save categories taxonomy
+const categoriesData = {
+  tree: categoryTree,
+  allPaths: Array.from(allCategoryPaths).sort()
+};
+fs.writeFileSync(path.join(dataDir, 'categories.json'), JSON.stringify(categoriesData, null, 2), 'utf8');
+fs.writeFileSync(path.join(srcDataDir, 'categories.json'), JSON.stringify(categoriesData, null, 2), 'utf8');
 
-console.log('Saved to backend/data/products.json and src/data/products.json');
+console.log('Successfully imported and structured', products.length, 'products with gallery, dates, and variations!');

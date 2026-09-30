@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MessageSquare, Phone, Mail, Clock, CheckCircle2, User, FileText } from 'lucide-react';
+import { MessageSquare, Phone, Mail, Clock, User } from 'lucide-react';
 
 export const InquiriesView: React.FC = () => {
   const [inquiries] = useState([
@@ -41,75 +41,75 @@ export const InquiriesView: React.FC = () => {
   return (
     <div className="space-y-6 font-sans">
       <div>
-        <h2 className="text-2xl font-bold text-white tracking-tight">Customer Quotation Inquiries</h2>
-        <p className="text-xs text-slate-400 mt-1">
+        <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Customer Quotation Inquiries</h2>
+        <p className="text-xs text-slate-500 mt-1">
           Direct leads submitted from the public website consultation form
         </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800 space-y-1">
-          <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Inquiries</div>
-          <div className="text-2xl font-black text-white">24</div>
-          <div className="text-[11px] text-sky-400">Past 30 days</div>
+        <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-1">
+          <div className="text-xs font-bold text-slate-500 uppercase tracking-wider">Total Inquiries</div>
+          <div className="text-2xl font-black text-slate-900">24</div>
+          <div className="text-[11px] text-sky-700 font-semibold">Past 30 days</div>
         </div>
-        <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800 space-y-1">
-          <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">New Uncontacted</div>
-          <div className="text-2xl font-black text-emerald-400">1</div>
-          <div className="text-[11px] text-slate-400">Needs immediate follow-up</div>
+        <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-1">
+          <div className="text-xs font-bold text-slate-500 uppercase tracking-wider">New Uncontacted</div>
+          <div className="text-2xl font-black text-emerald-600">1</div>
+          <div className="text-[11px] text-slate-500">Needs immediate follow-up</div>
         </div>
-        <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800 space-y-1">
-          <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Average Response Time</div>
-          <div className="text-2xl font-black text-cyan-400">1.8 Hrs</div>
-          <div className="text-[11px] text-slate-400">Standard &lt; 4 Hours</div>
+        <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-1">
+          <div className="text-xs font-bold text-slate-500 uppercase tracking-wider">Average Response Time</div>
+          <div className="text-2xl font-black text-cyan-600">1.8 Hrs</div>
+          <div className="text-[11px] text-slate-500">Standard &lt; 4 Hours</div>
         </div>
       </div>
 
-      <div className="rounded-3xl bg-slate-900 border border-slate-800 overflow-hidden shadow-xl">
-        <div className="p-6 border-b border-slate-800">
-          <h3 className="text-base font-bold text-white">Recent Customer Requests</h3>
+      <div className="rounded-3xl bg-white border border-slate-200 shadow-sm overflow-hidden">
+        <div className="p-6 border-b border-slate-200">
+          <h3 className="text-base font-bold text-slate-900">Recent Customer Requests</h3>
         </div>
 
-        <div className="divide-y divide-slate-800">
+        <div className="divide-y divide-slate-100">
           {inquiries.map((inq) => (
-            <div key={inq.id} className="p-6 hover:bg-slate-800/40 transition-colors space-y-3">
+            <div key={inq.id} className="p-6 hover:bg-sky-50/40 transition-colors space-y-3">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-sky-600/20 text-sky-400 flex items-center justify-center font-bold text-xs">
-                    <User className="w-4 h-4" />
+                  <div className="w-10 h-10 rounded-xl bg-sky-50 text-sky-700 flex items-center justify-center font-bold text-xs border border-sky-100">
+                    <User className="w-5 h-5" />
                   </div>
                   <div>
-                    <div className="text-sm font-bold text-white">{inq.name}</div>
-                    <div className="text-xs text-sky-400 font-semibold">{inq.serviceType}</div>
+                    <div className="text-sm font-extrabold text-slate-900">{inq.name}</div>
+                    <div className="text-xs text-sky-700 font-bold">{inq.serviceType}</div>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <span className="text-xs text-slate-400 flex items-center gap-1">
+                  <span className="text-xs text-slate-500 flex items-center gap-1">
                     <Clock className="w-3.5 h-3.5" /> {inq.date}
                   </span>
-                  <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-sky-500/10 text-sky-400 border border-sky-500/30">
+                  <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-sky-50 text-sky-700 border border-sky-200">
                     {inq.status}
                   </span>
                 </div>
               </div>
 
-              <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800/80 text-xs text-slate-300 space-y-1.5">
-                <div className="text-slate-400 text-[11px] font-semibold">
-                  Source: <span className="text-white">{inq.waterSource}</span>
+              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-700 space-y-1.5">
+                <div className="text-slate-500 text-[11px] font-bold">
+                  Source: <span className="text-slate-900">{inq.waterSource}</span>
                 </div>
-                <div className="text-slate-300 leading-relaxed font-sans">
+                <div className="text-slate-700 leading-relaxed font-sans">
                   "{inq.message}"
                 </div>
               </div>
 
-              <div className="flex flex-wrap items-center gap-4 text-xs text-slate-400 pt-1">
-                <a href={`tel:${inq.phone}`} className="flex items-center gap-1.5 hover:text-sky-400 transition-colors">
-                  <Phone className="w-3.5 h-3.5 text-slate-500" />
+              <div className="flex flex-wrap items-center gap-4 text-xs text-slate-600 pt-1 font-semibold">
+                <a href={`tel:${inq.phone}`} className="flex items-center gap-1.5 hover:text-sky-600 transition-colors">
+                  <Phone className="w-3.5 h-3.5 text-slate-400" />
                   <span>{inq.phone}</span>
                 </a>
-                <a href={`mailto:${inq.email}`} className="flex items-center gap-1.5 hover:text-sky-400 transition-colors">
-                  <Mail className="w-3.5 h-3.5 text-slate-500" />
+                <a href={`mailto:${inq.email}`} className="flex items-center gap-1.5 hover:text-sky-600 transition-colors">
+                  <Mail className="w-3.5 h-3.5 text-slate-400" />
                   <span>{inq.email}</span>
                 </a>
               </div>

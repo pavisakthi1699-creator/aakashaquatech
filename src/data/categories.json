@@ -1,0 +1,127 @@
+{
+  "tree": {
+    "Industrial RO System": {
+      "1000 LPH": [],
+      "2000 LPH": [],
+      "250 LPH": [],
+      "3000 LPH": [],
+      "500 LPH": [],
+      "5000 LPH": [],
+      "100 LPH": [],
+      "60 LPH": [],
+      "25 LPH to 40 LPH": [],
+      "80 LPH": []
+    },
+    "Domestic RO": {
+      "Gravity": [],
+      "AO SMITH": [],
+      "kent": [
+        "RO Water Purifier"
+      ],
+      "Purella": [
+        "UV Water Purifier"
+      ],
+      "Conway": [],
+      "Wave": [],
+      "Aquaguard": [],
+      "Aakash UV Water Purifier": []
+    },
+    "Water Treatment": {
+      "Softner": [
+        "Enviro",
+        "Purella",
+        "Softner",
+        "Kent",
+        "Aakash"
+      ]
+    },
+    "Alkaline": {},
+    "Domestic Ro Aakash": {
+      "Aakash Purifier": [],
+      "Domestic RO System": [
+        "12 LPH"
+      ]
+    },
+    "FRP Pressure Vessels": {},
+    "Mop": {},
+    "Heat Pump Water Heater": {},
+    "Spares": {},
+    "Uncategorized": {},
+    "SS Tanks": {},
+    "DM Plant": {},
+    "Under Sink": {},
+    "Sand Filter": {
+      "Kent": [],
+      "Aakash": []
+    },
+    "Iron Remover Filter": {
+      "Aakash": []
+    },
+    "Heat Pump": {},
+    "SS WATER DISPENSER": {}
+  },
+  "allPaths": [
+    "Alkaline",
+    "DM Plant",
+    "Domestic RO",
+    "Domestic RO > AO SMITH",
+    "Domestic RO > AO SMITH > RO Water Purifier",
+    "Domestic RO > AO SMITH > UV Water Purifier",
+    "Domestic RO > Aakash UV Water Purifier",
+    "Domestic RO > Aquaguard",
+    "Domestic RO > Aquaguard > RO Water Purifier",
+    "Domestic RO > Aquaguard > UV Water Purifier",
+    "Domestic RO > Conway",
+    "Domestic RO > Gravity",
+    "Domestic RO > Purella",
+    "Domestic RO > Purella > RO Water Purifier",
+    "Domestic RO > Purella > UV Water Purifier",
+    "Domestic RO > Wave",
+    "Domestic RO > ZeroB",
+    "Domestic RO > ZeroB > RO Water Purifier",
+    "Domestic RO > ZeroB > UV Water Purifier",
+    "Domestic RO > kent",
+    "Domestic RO > kent > RO Water Purifier",
+    "Domestic RO > kent > UV Water Purifier",
+    "Domestic Ro Aakash",
+    "Domestic Ro Aakash > Aakash Purifier",
+    "Domestic Ro Aakash > Domestic RO System",
+    "Domestic Ro Aakash > Domestic RO System > 12 LPH",
+    "FRP Pressure Vessels",
+    "Heat Pump",
+    "Heat Pump Water Heater",
+    "Industrial RO System",
+    "Industrial RO System > 100 LPH",
+    "Industrial RO System > 1000 LPH",
+    "Industrial RO System > 2000 LPH",
+    "Industrial RO System > 25 LPH to 40 LPH",
+    "Industrial RO System > 250 LPH",
+    "Industrial RO System > 3000 LPH",
+    "Industrial RO System > 500 LPH",
+    "Industrial RO System > 5000 LPH",
+    "Industrial RO System > 60 LPH",
+    "Industrial RO System > 80 LPH",
+    "Iron Remover Filter",
+    "Iron Remover Filter > Aakash",
+    "Iron Remover Filter > Kent",
+    "Iron Remover Filter > ZeroB",
+    "Mop",
+    "Non Electric",
+    "SS Tanks",
+    "SS WATER DISPENSER",
+    "Sand Filter",
+    "Sand Filter > Aakash",
+    "Sand Filter > Kent",
+    "Sand Filter > Zerob",
+    "Spares",
+    "Uncategorized",
+    "Under Sink",
+    "Water Treatment",
+    "Water Treatment > Softner",
+    "Water Treatment > Softner > Aakash",
+    "Water Treatment > Softner > Enviro",
+    "Water Treatment > Softner > Kent",
+    "Water Treatment > Softner > Purella",
+    "Water Treatment > Softner > Softner"
+  ]
+}
