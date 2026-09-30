@@ -1,0 +1,16 @@
+node_modules/
+dist/
+build/
+.DS_Store
+*.log
+.env
+.env.local
+.vscode/
+.idea/
+backend/logs/*
+!backend/logs/.gitkeep
+backend/cache/*
+!backend/cache/.gitkeep
+backend/uploads/*
+!backend/uploads/.gitkeep
+*.sqlite
