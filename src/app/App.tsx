@@ -6,13 +6,27 @@ import { Services } from './components/Services';
 import { WhyUs } from './components/WhyUs';
 import { ContactForm } from './components/ContactForm';
 import { Footer } from './components/Footer';
-import { AdminPanel } from './components/AdminPanel';
+import { AdminLogin } from './admin/AdminLogin';
+import { AdminDashboard } from './admin/AdminDashboard';
 import { fetchProducts, fetchSettings, ProductItem } from './services/api';
 import { X, Droplets } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [view, setView] = useState<'site' | 'admin'>(() => {
     return window.location.hash === '#admin' ? 'admin' : 'site';
+  });
+
+  const [adminUser, setAdminUser] = useState<{ name: string; email: string; role: string } | null>(() => {
+    try {
+      const stored = localStorage.getItem('aakash_admin_auth');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        return parsed.user || null;
+      }
+    } catch {
+      // ignore
+    }
+    return null;
   });
 
   const [products, setProducts] = useState<ProductItem[]>([]);
@@ -68,16 +82,42 @@ export const App: React.FC = () => {
   const handleBackToSite = () => {
     window.location.hash = '';
     setView('site');
-    loadCatalog(); // Refresh products in case admin edited something
+    loadCatalog();
   };
 
+  const handleAdminLogout = () => {
+    localStorage.removeItem('aakash_admin_auth');
+    setAdminUser(null);
+  };
+
+  const handleAdminLoginSuccess = (user: { name: string; email: string; role: string }) => {
+    setAdminUser(user);
+  };
+
+  // If in Admin view mode
   if (view === 'admin') {
-    return <AdminPanel onBackToSite={handleBackToSite} />;
+    if (!adminUser) {
+      return (
+        <AdminLogin
+          onLoginSuccess={handleAdminLoginSuccess}
+          onBackToSite={handleBackToSite}
+        />
+      );
+    }
+
+    return (
+      <AdminDashboard
+        user={adminUser}
+        onLogout={handleAdminLogout}
+        onBackToSite={handleBackToSite}
+      />
+    );
   }
 
+  // Public Storefront View
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col selection:bg-sky-500 selection:text-white">
-      {/* Top Banner */}
+      {/* Top Notification Banner */}
       <div className="bg-sky-900 text-sky-100 text-xs py-2 px-4 text-center font-medium border-b border-sky-800 flex items-center justify-center gap-2">
         <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
         <span>Free Raw Water TDS & Hardness Test Kit with Every Plant Installation Inquiry</span>
