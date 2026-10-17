@@ -1,4 +1,4 @@
-﻿import fallbackProducts from '../../data/products.json';
+import fallbackProducts from '../../data/products.json';
 
 export interface ProductItem {
   id: string | number;
@@ -6,22 +6,61 @@ export interface ProductItem {
   slug?: string;
   type?: string;
   sku: string;
+  gtin?: string;
+  brand?: string;
+  brands?: string[];
   category: string;
+  parentCategory?: string;
+  childCategory?: string;
+  subCategory?: string;
   categories?: string[];
+  tags?: string[];
   regularPrice: number;
   salePrice: number;
   minPrice?: number;
   maxPrice?: number;
+  dateSalePriceStarts?: string;
+  dateSalePriceEnds?: string;
+  taxStatus?: string;
+  taxClass?: string;
   inStock: boolean;
   stock?: number;
+  lowStockAmount?: string;
+  backordersAllowed?: boolean;
+  soldIndividually?: boolean;
   featured?: boolean;
+  published?: boolean;
+  visibility?: string;
+  allowReviews?: boolean;
+  purchaseNote?: string;
+  shippingClass?: string;
+  externalUrl?: string;
+  buttonText?: string;
+  position?: number;
+  upsells?: string[];
+  crossSells?: string[];
+  groupedProducts?: string[];
   mainImage: string;
+  galleryImages?: string[];
   images?: string[];
   shortDescription?: string;
   description?: string;
   variationsCount?: number;
   variations?: any[];
-  attributes?: { name: string; values: string[] }[];
+  attributes?: {
+    name: string;
+    values: string[];
+    visible?: boolean;
+    global?: boolean;
+    default?: string;
+  }[];
+  weight?: string;
+  dimensions?: {
+    length: string;
+    width: string;
+    height: string;
+  };
+  createdAt?: string;
   updatedAt?: string;
 }
 
@@ -43,7 +82,16 @@ export interface InquiryPayload {
   message?: string;
 }
 
-const BACKEND_BASE = '/backend/api';
+const getBackendBase = () => {
+  if (typeof window === 'undefined') return '/backend/api';
+  const pathname = window.location.pathname;
+  if (pathname.includes('/version2.0')) {
+    return '/version2.0/backend/api';
+  }
+  return '/backend/api';
+};
+
+const BACKEND_BASE = getBackendBase();
 const LOCAL_STORAGE_KEY = 'aakash_products_cache';
 
 // Helper to get local override cache
@@ -103,14 +151,15 @@ export async function fetchSettings() {
     return data.data;
   } catch {
     return {
-      company: 'Aakash Aqua Tech',
-      phone: '+91 98765 43210',
-      email: 'info@aakashaquatech.com',
-      address: 'Plot No. 42, Industrial Area, Phase II, Hyderabad, Telangana',
-      workingHours: 'Mon - Sat: 9:00 AM - 7:00 PM',
+      company: 'AAKASH PURE AQUA TECH PRIVATE LIMITED',
+      phone: '96555 77666',
+      whatsapp: '96555 99666',
+      email: 'ceo@aakashaquatech.in',
+      address: '10/62C, BrindavanRoad, 1st Cross (Behind Dr.Sudamani Hospital), Fairlands, Salem - 636016, Tamil Nadu',
+      workingHours: 'Mon - Sun: 9:00 AM - 8:00 PM (24/7 Support)',
       stats: [
         { label: 'Industrial & Commercial Plants', value: '650+' },
-        { label: 'Catalog Products', value: '375+' },
+        { label: 'Live Catalog Products', value: '375+' },
         { label: 'Service Response Time', value: '< 4 Hrs' },
         { label: 'Client Satisfaction Rate', value: '99.4%' }
       ]

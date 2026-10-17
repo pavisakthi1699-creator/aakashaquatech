@@ -1,0 +1,274 @@
+/* =====================================================================
+   PRODUCT SECTIONS  (Featured carousel + scroll showcase)
+   Cream / beige palette – change the 6 variables below to re-colour both.
+===================================================================== */
+.fp, .ps {
+  --cream-1: #fbf7f0;      /* lightest wall colour */
+  --cream-2: #f3e9da;      /* main background */
+  --cream-3: #e8d7bd;      /* deeper edge shade */
+  --tan: #c9a273;          /* badges, buttons, glow */
+  --tan-d: #a77f4f;
+  --ink: #3d2f21;          /* headings */
+  --ink-2: #7a6a58;        /* body text */
+  font-family: 'DM Sans', sans-serif;
+  color: var(--ink);
+}
+
+/* ---------------------------------------------------------------------
+   1) FEATURED PRODUCTS
+--------------------------------------------------------------------- */
+.fp {
+  position: relative; margin-bottom: 5rem; padding: clamp(2rem, 4vw, 3.4rem) 0 2.2rem; overflow: hidden;
+  border-radius: 36px; text-align: center;
+  background:
+    radial-gradient(520px 320px at 8% 6%, rgba(255, 255, 255, .95), transparent 70%),
+    radial-gradient(620px 380px at 96% 100%, rgba(201, 162, 115, .38), transparent 70%),
+    radial-gradient(420px 300px at 100% 0%, rgba(220, 196, 160, .45), transparent 70%),
+    linear-gradient(160deg, var(--cream-1), var(--cream-2) 60%, var(--cream-3));
+  box-shadow: 0 24px 60px rgba(31, 80, 88, .28), inset 0 1px 0 #fff;
+}
+.fp-head span { font-size: .8rem; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; color: var(--tan-d) }
+.fp-head h2 { margin: .3rem 0 .4rem; font-family: 'Playfair Display', Georgia, serif; font-weight: 700; color: var(--ink); font-size: clamp(2rem, 4.4vw, 3.4rem); letter-spacing: -.01em }
+.fp-head p { margin: 0 auto; color: var(--ink-2); max-width: 46ch }
+
+.fp-stage {
+  --w: 300px; --step: 312px;
+  position: relative; height: 660px; margin-top: 1.4rem; outline: 0; touch-action: pan-y; user-select: none;
+}
+.fp-card {
+  position: absolute; left: 50%; top: 50%; width: var(--w); height: 540px; padding: 1.1rem 1.1rem 1.2rem;
+  display: flex; flex-direction: column; text-align: left; cursor: pointer;
+  background: linear-gradient(180deg, #fffdf9, #f7efe2); border: 1px solid rgba(255, 255, 255, .9); border-radius: 26px;
+  box-shadow: 0 14px 34px rgba(120, 90, 50, .18), inset 0 1px 0 #fff;
+  transform: translate(-50%, -50%) translateX(calc(var(--o) * var(--step))) scale(var(--s));
+  transition: transform .6s cubic-bezier(.2, .8, .2, 1), opacity .5s, box-shadow .5s, filter .5s;
+  filter: saturate(.9);
+}
+.fp-card.on { cursor: default; filter: none; box-shadow: 0 28px 60px rgba(120, 90, 50, .3), inset 0 1px 0 #fff; height: 565px }
+.fp-card[data-far] { opacity: 0; pointer-events: none }
+.fp-top { display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 2 }
+.fp-badge { padding: .28rem .75rem; border-radius: 999px; background: #efdfc6; color: var(--tan-d); font-size: .7rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase }
+.fp-heart { all: unset; box-sizing: border-box; width: 32px; height: 32px; display: grid; place-items: center; border-radius: 50%; background: #fff; cursor: pointer; box-shadow: 0 3px 10px rgba(120, 90, 50, .15); transition: transform .3s }
+.fp-heart:hover { transform: scale(1.12) }
+.fp-heart svg { width: 16px; height: 16px; fill: none; stroke: var(--tan-d); stroke-width: 2; stroke-linejoin: round; transition: .3s }
+.fp-heart.on svg { fill: #d9695f; stroke: #d9695f }
+.fp-heart:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px }
+.fp-img { position: relative; flex: 1; min-height: 0; margin: .3rem 0 .6rem; display: grid; place-items: center; border-radius: 18px; background: radial-gradient(closest-side, #fff, #f3e7d4 90%) }
+.fp-img img { position: absolute; inset: 0; margin: auto; max-width: 88%; max-height: 88%; object-fit: contain; filter: drop-shadow(0 14px 14px rgba(120, 90, 50, .28)); transition: transform .6s }
+.fp-card.on .fp-img img { transform: scale(1.06) }
+.fp-card h3 { margin: 0 0 .2rem; font: 700 1.25rem/1.2 'Playfair Display', Georgia, serif; color: var(--ink); letter-spacing: 0 }
+.fp-card p { margin: 0 0 .6rem; font-size: .92rem; line-height: 1.5; color: var(--ink-2); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden }
+.fp-meta { display: flex; align-items: center; gap: .35rem; margin-bottom: .6rem; font-size: .72rem; font-weight: 600; color: var(--tan-d) }
+.fp-meta svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round }
+.fp-foot { display: flex; justify-content: space-between; align-items: center; gap: .5rem; font-size: .78rem; font-weight: 700; color: var(--ink) }
+.fp-cta { padding: .55rem 1.1rem; border-radius: 999px; background: linear-gradient(135deg, #d4ae80, var(--tan-d)); color: #fff; font-size: .8rem; font-weight: 700; box-shadow: 0 8px 18px rgba(167, 127, 79, .4); transition: transform .3s, box-shadow .3s }
+.fp-cta:hover { transform: translateY(-2px); box-shadow: 0 12px 24px rgba(167, 127, 79, .5) }
+
+.fp-arr { all: unset; box-sizing: border-box; position: absolute; top: 50%; z-index: 20; width: 46px; height: 46px; margin-top: -23px; display: grid; place-items: center; border-radius: 50%; background: #fff; cursor: pointer; box-shadow: 0 8px 22px rgba(120, 90, 50, .25); transition: transform .3s, background .3s }
+.fp-arr.l { left: 12px } .fp-arr.r { right: 12px }
+.fp-arr:hover { background: var(--tan); transform: scale(1.08) }
+.fp-arr:hover svg { stroke: #fff }
+.fp-arr svg { width: 20px; height: 20px; fill: none; stroke: var(--ink); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round }
+.fp-arr:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px }
+
+.fp-dots { display: flex; justify-content: center; gap: .5rem; margin-top: .4rem }
+.fp-dots button { all: unset; width: 9px; height: 9px; border-radius: 99px; background: #dcc7a6; cursor: pointer; transition: .4s }
+.fp-dots button.on { width: 28px; background: var(--tan-d) }
+.fp-dots button:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px }
+
+@media (max-width: 1100px) { .fp-stage { --w: 280px; --step: 262px } }
+@media (max-width: 980px) {
+  /* Inactive left and right cards: blurred, desaturated & dimmed */
+  .fp-card:not(.on) {
+    filter: blur(5px) grayscale(85%) opacity(0.52) !important;
+    transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.5s ease, filter 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.5s ease !important;
+  }
+  .fp-card:not(.on) .fp-img img {
+    filter: blur(4px) grayscale(90%) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.12)) !important;
+    transform: scale(0.92) !important;
+    transition: filter 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+  }
+
+  /* Active center card: smoothly transitions to full vibrant color and sharp clarity */
+  .fp-card.on {
+    filter: blur(0px) grayscale(0%) opacity(1) !important;
+    box-shadow: 0 28px 60px rgba(120, 90, 50, 0.32), inset 0 1px 0 #fff !important;
+    transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.5s ease, filter 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.5s ease !important;
+  }
+  .fp-card.on .fp-img img {
+    filter: drop-shadow(0 14px 14px rgba(120, 90, 50, 0.28)) blur(0px) grayscale(0%) !important;
+    transform: scale(1.06) !important;
+    transition: filter 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+  }
+}
+@media (max-width: 760px) {
+  .fp-stage { --w: 290px; --step: 200px; height: 620px }
+  .fp-card[data-far1] { opacity: 0; pointer-events: none }
+  .fp-arr { width: 40px; height: 40px }
+  .fp-arr.l { left: 6px } .fp-arr.r { right: 6px }
+}
+
+/* ---------------------------------------------------------------------
+   2) SCROLL SHOWCASE  (video behaviour – rows are positioned by JS)
+--------------------------------------------------------------------- */
+.ps { width: min(1280px, 94%); margin: 0 auto 5rem; position: relative }
+.ps-stage {
+  position: sticky; top: 84px; height: calc(100svh - 104px); min-height: 480px; overflow: hidden; border-radius: 34px;
+  background:
+    radial-gradient(700px 420px at 4% 0%, rgba(255, 255, 255, .95), transparent 70%),
+    linear-gradient(160deg, var(--cream-1), var(--cream-2) 65%, #eadbc2);
+  box-shadow: 0 30px 70px rgba(31, 80, 88, .35), inset 0 0 140px rgba(214, 185, 140, .38), inset 0 1px 0 #fff;
+}
+.ps-count { position: absolute; z-index: 5; right: 22px; top: 18px; font-size: .78rem; letter-spacing: .12em; color: var(--ink-2) }
+.ps-count b { color: var(--ink); font-size: 1rem }
+
+/* one row = one product + its text, stacked absolutely; JS moves it */
+.ps-row { position: absolute; left: 0; top: 0; width: 100%; will-change: transform, opacity, filter }
+/* product: big – 44% of the stage width, fills the row height (left side or, when flipped, right side) */
+.ps-prod { position: absolute; z-index: 2; left: 5%; top: 3%; width: 44%; height: 94%; will-change: transform }
+.ps-row.flip .ps-prod { left: 51% }
+/* every product sits in the same SQUARE box (= the Gravity purifier size), so wide images no longer look huge */
+.ps-prod img { position: absolute; top: 0; left: 50%; height: 100%; width: auto; aspect-ratio: 1 / 1; max-width: 100%; transform: translateX(-50%); object-fit: contain; filter: drop-shadow(0 22px 22px rgba(110, 80, 40, .32)) }
+/* the soft beige "shade" behind every product (was mint in the video) */
+.ps-prod::before { content: ''; position: absolute; inset: -25% -20%; pointer-events: none; filter: blur(16px);
+  background: radial-gradient(closest-side, rgba(201, 162, 115, .5), rgba(222, 196, 157, .26) 55%, transparent 80%) }
+
+/* text: big and close to the product */
+.ps-txt { position: absolute; z-index: 1; left: 53%; top: 3%; width: 42%; max-width: 680px; height: 94%; display: flex; flex-direction: column; justify-content: center; will-change: transform }
+.ps-row.flip .ps-txt { left: 11%; width: 38% }   /* text on the left: extra breathing space from the left edge */
+.ps-txt h3 { display: flex; align-items: center; gap: .7rem; margin: 0 0 .4rem; font: 700 clamp(1.4rem, min(2.5vw, 4.6vh), 2.7rem)/1.15 'Bricolage Grotesque', sans-serif; color: var(--ink) }
+.ps-txt h3 svg { flex: none; width: 1.5em; height: 1.5em; padding: .3em; border-radius: 50%; background: #efdfc6; fill: none; stroke: var(--tan-d); stroke-width: 2; stroke-linejoin: round }
+.ps-txt b { display: block; margin-bottom: .6rem; font-size: clamp(1rem, min(1.5vw, 2.8vh), 1.6rem); color: var(--tan-d) }
+.ps-txt p { margin: 0 0 .9rem; font-size: clamp(.95rem, min(1.2vw, 2.4vh), 1.3rem); line-height: 1.55; color: var(--ink-2); display: -webkit-box; -webkit-line-clamp: 7; -webkit-box-orient: vertical; overflow: hidden }
+.ps-txt a { align-self: flex-start; display: inline-flex; align-items: center; gap: .5rem; font-size: clamp(.95rem, 1.1vw, 1.15rem); font-weight: 700; color: var(--ink); border-bottom: 2px solid var(--tan); padding-bottom: 2px; transition: gap .3s, color .3s }
+.ps-txt a:hover { gap: .8rem; color: var(--tan-d) }
+.ps-txt a svg { width: 1em; height: 1em; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round }
+
+@media (max-width: 859px) {
+  .pz .ps,
+  .ps {
+    width: 100%;
+    max-width: 100%;
+    padding: 0 14px;
+    box-sizing: border-box;
+    margin: 0 auto 3.5rem;
+  }
+  .pz .ps-stage,
+  .ps-stage {
+    top: 74px;
+    height: calc(100svh - 74px - 66px - 14px);
+    min-height: 460px;
+    border-radius: 26px;
+    overflow: hidden;
+    background: transparent !important;
+    box-shadow: none !important;
+    position: sticky;
+  }
+  .ps-count {
+    position: absolute;
+    z-index: 50;
+    top: 14px;
+    right: 18px;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    color: var(--ink-2);
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 4px 12px;
+    border-radius: 999px;
+    box-shadow: 0 2px 10px rgba(70, 50, 25, 0.12);
+    border: 1px solid rgba(220, 205, 185, 0.7);
+  }
+  .ps-count b {
+    color: var(--ink);
+    font-size: 1.05rem;
+  }
+  .ps-row {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100% !important;
+    border-radius: 26px;
+    background:
+      radial-gradient(550px 340px at 8% 0%, rgba(255, 255, 255, 0.98), transparent 70%),
+      linear-gradient(168deg, #fffdfa 0%, #fbf5ed 45%, #f1e2cc 100%);
+    box-shadow: 0 -12px 32px rgba(45, 32, 20, 0.18), 0 12px 30px rgba(31, 80, 88, 0.16), inset 0 1px 0 #ffffff;
+    border: 1.5px solid rgba(225, 210, 188, 0.95);
+    overflow: hidden;
+    will-change: transform, opacity;
+  }
+  .ps-row .ps-prod,
+  .ps-row.flip .ps-prod {
+    left: 4%;
+    top: 4%;
+    width: 92%;
+    height: 40%;
+  }
+  .ps-prod img {
+    filter: drop-shadow(0 16px 20px rgba(110, 80, 40, 0.28));
+  }
+  .ps-row .ps-txt,
+  .ps-row.flip .ps-txt {
+    left: 5%;
+    top: 45%;
+    width: 90%;
+    max-width: none;
+    height: auto;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: center;
+    padding: 0 6px;
+    box-sizing: border-box;
+  }
+  .ps-txt h3 {
+    justify-content: center;
+    font-size: 1.25rem;
+    margin-bottom: 0.2rem;
+    gap: 0.5rem;
+  }
+  .ps-txt h3 svg {
+    width: 1.3em;
+    height: 1.3em;
+  }
+  .ps-txt b {
+    font-size: 0.92rem;
+    margin-bottom: 0.35rem;
+  }
+  .ps-txt p {
+    font-size: 0.88rem;
+    line-height: 1.45;
+    margin-bottom: 0.65rem;
+    -webkit-line-clamp: 3;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .ps-txt a {
+    align-self: center;
+    font-size: 0.95rem;
+    gap: 0.4rem;
+  }
+}
+
+/* reduced-motion fallback: plain stacked list, no sticky / scroll effects */
+.ps.static { height: auto !important }
+.ps.static .ps-stage { position: static; height: auto; overflow: visible }
+.ps.static .ps-row { position: relative; height: auto !important; min-height: 320px; opacity: 1 !important; visibility: visible !important; filter: none !important; transform: none !important }
+.ps.static .ps-prod, .ps.static .ps-txt { transform: none !important }
+.ps.static .ps-count { display: none }
+@media (prefers-reduced-motion: reduce) { .fp-card, .fp-img img { transition: none } }
+
+/* =====================================================================
+   FULL-WIDTH CREAM BAND  (wraps Featured Products + scroll showcase)
+===================================================================== */
+.pz{position:relative;width:100%;margin:0 0 5rem;
+  background:
+    radial-gradient(900px 520px at 6% 0%, rgba(255,255,255,.95), transparent 70%),
+    radial-gradient(900px 600px at 100% 100%, rgba(201,162,115,.35), transparent 70%),
+    linear-gradient(170deg,#fbf7f0,#f3e9da 55%,#ead9bd)}
+.pz .fp{width:100%;max-width:none;margin:0;border-radius:0;background:none;box-shadow:none;padding-top:clamp(3rem,6vw,5rem)}
+@media (min-width: 860px) {
+  .pz .ps { width: 100%; margin: 0; }
+  .pz .ps-stage { height: calc(100svh - 84px); border-radius: 0; background: none; box-shadow: none; }
+}

@@ -15,20 +15,55 @@ class Database
 
     public function __construct()
     {
-        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-            // Local Windows Development (XAMPP / Laragon / Native MySQL)
-            $this->host = '127.0.0.1';
-            $this->port = '3306';
-            $this->db_name = 'aakashaquatech';
-            $this->username = 'root';
-            $this->password = '';
-        } else {
-            // Production Linux Server
-            $this->host = 'localhost';
-            $this->port = '3306';
-            $this->db_name = 'aakashaquatech';
-            $this->username = 'root';
-            $this->password = '';
+        // Default local defaults
+        $this->host = 'localhost';
+        $this->port = '3306';
+        $this->db_name = 'aakashaquatech';
+        $this->username = 'root';
+        $this->password = '';
+
+        // 1. Check custom db_credentials.php file if configured
+        $credFile = __DIR__ . '/db_credentials.php';
+        if (file_exists($credFile)) {
+            $creds = include $credFile;
+            if (is_array($creds) && !empty($creds['db_name'])) {
+                $this->host = !empty($creds['host']) ? $creds['host'] : 'localhost';
+                $this->port = !empty($creds['port']) ? $creds['port'] : '3306';
+                $this->db_name = $creds['db_name'];
+                $this->username = !empty($creds['username']) ? $creds['username'] : 'root';
+                $this->password = isset($creds['password']) ? $creds['password'] : '';
+                return;
+            }
+        }
+
+        // 2. Auto-detect WordPress wp-config.php in parent directories
+        $possibleWpConfigPaths = [
+            dirname(__DIR__, 2) . '/wp-config.php', // when backend is inside public_html/backend
+            dirname(__DIR__, 3) . '/wp-config.php', // when backend is inside public_html/version2.0/backend
+            dirname(__DIR__, 4) . '/wp-config.php'
+        ];
+
+        foreach ($possibleWpConfigPaths as $wpConfig) {
+            if (file_exists($wpConfig)) {
+                $content = @file_get_contents($wpConfig);
+                if ($content) {
+                    if (preg_match("/define\s*\(\s*['\"]DB_NAME['\"]\s*,\s*['\"]([^'\"]+)['\"]\s*\)/i", $content, $m)) {
+                        $this->db_name = $m[1];
+                    }
+                    if (preg_match("/define\s*\(\s*['\"]DB_USER['\"]\s*,\s*['\"]([^'\"]+)['\"]\s*\)/i", $content, $m)) {
+                        $this->username = $m[1];
+                    }
+                    if (preg_match("/define\s*\(\s*['\"]DB_PASSWORD['\"]\s*,\s*['\"]([^'\"]*)['\"]\s*\)/i", $content, $m)) {
+                        $this->password = $m[1];
+                    }
+                    if (preg_match("/define\s*\(\s*['\"]DB_HOST['\"]\s*,\s*['\"]([^'\"]+)['\"]\s*\)/i", $content, $m)) {
+                        $hostParts = explode(':', $m[1]);
+                        $this->host = $hostParts[0];
+                        if (isset($hostParts[1])) $this->port = $hostParts[1];
+                    }
+                    return;
+                }
+            }
         }
     }
 

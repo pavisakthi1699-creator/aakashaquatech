@@ -1,0 +1,754 @@
+/* =====================================================================
+   CONTACT US PAGE (cp-*) – 100% Home Color & Theme
+   Palette: sand #eadfcc · cream #fbf7f0/#f3e9da/#e8d7bd · tan #c9a273 · navy #0d2540 · deep-blue #0b3f66
+   Same look and feel as Home "About us" card, Shop cards, and Home UI.
+===================================================================== */
+.cp {
+  --sand: #eadfcc;
+  --cream-1: #fbf7f0;
+  --cream-2: #f3e9da;
+  --cream-3: #e8d7bd;
+  --tan: #c9a273;
+  --tan-d: #a77f4f;
+  --navy: #0d2540;
+  --deep: #0b3f66;
+  --blue: #1a62ad;
+  --teal: #0d8d97;
+  --body: #5b4e40;
+  --line: #e2d3b9;
+  --card: linear-gradient(160deg, #fffdf9, #f7efe2 62%, #eedfc6);
+  --shadow: 0 18px 44px rgba(120, 90, 50, 0.18), inset 0 1px 0 #fff;
+
+  font-family: 'Outfit', 'DM Sans', sans-serif;
+  color: var(--navy);
+  background: transparent;
+  width: min(1320px, 94%);
+  margin: 0 auto;
+  padding: 8.4rem 0 5rem;
+}
+
+/* ---------------- Hero / Head Section ---------------- */
+.cp-hero {
+  margin-bottom: 2.5rem;
+}
+
+.cp-crumb {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: var(--body);
+  margin-bottom: 1rem;
+}
+
+.cp-crumb a,
+.cp-crumb button {
+  color: var(--deep);
+  background: none;
+  border: none;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.cp-crumb a:hover,
+.cp-crumb button:hover {
+  color: var(--teal);
+}
+
+.cp-crumb span.current {
+  color: var(--tan-d);
+  font-weight: 700;
+}
+
+.cp-hero h1 {
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(2.4rem, 4.6vw, 3.8rem);
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--navy);
+  margin: 0 0 0.4rem;
+  letter-spacing: -0.04em;
+}
+
+.cp-title-line {
+  display: block;
+  width: 74px;
+  height: 5px;
+  margin: 0.75rem 0 1.25rem;
+  border-radius: 6px;
+  background: linear-gradient(90deg, var(--tan), var(--teal));
+}
+
+.cp-hero p {
+  max-width: 780px;
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: var(--body);
+  margin: 0;
+}
+
+.cp-hero p strong {
+  color: var(--navy);
+  font-weight: 700;
+}
+
+/* ---------------- Main Content Layout Grid ---------------- */
+.cp-content {
+  position: relative;
+  z-index: 2;
+}
+
+.cp-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+@media (min-width: 1024px) {
+  .cp-grid {
+    grid-template-columns: 1.12fr 0.88fr;
+    gap: 2.4rem;
+  }
+}
+
+/* ---------------- Cards (Sandy Cream Home Style) ---------------- */
+.cp-card {
+  background: var(--card);
+  border-radius: 28px;
+  border: 1px solid #ffffff;
+  box-shadow: var(--shadow);
+  padding: 2.2rem;
+  margin-bottom: 2rem;
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+
+.cp-card:last-child {
+  margin-bottom: 0;
+}
+
+.cp-card-head {
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 1.25rem;
+  margin-bottom: 1.6rem;
+}
+
+.cp-card-label {
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--tan-d);
+  display: block;
+  margin-bottom: 0.35rem;
+}
+
+.cp-card-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: var(--navy);
+  margin: 0 0 0.35rem;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.cp-card-desc {
+  font-size: 0.9rem;
+  color: var(--body);
+  margin: 0;
+  line-height: 1.55;
+}
+
+/* ---------------- Form Styles (Matches Home Demo Modal) ---------------- */
+.cp-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.cp-form-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .cp-form-row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.cp-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.cp-field label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--navy);
+}
+
+.cp-field label span.req {
+  color: #c53030;
+}
+
+.cp-input,
+.cp-select,
+.cp-textarea {
+  width: 100%;
+  padding: 0.88rem 1.05rem;
+  border-radius: 14px;
+  border: 1.5px solid rgba(201, 162, 115, 0.6);
+  background: rgba(255, 255, 255, 0.88);
+  color: var(--navy);
+  font-family: inherit;
+  font-size: 0.94rem;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.cp-input:focus,
+.cp-select:focus,
+.cp-textarea:focus {
+  outline: none;
+  background: #ffffff;
+  border-color: var(--deep);
+  box-shadow: 0 0 0 4px rgba(11, 63, 102, 0.14);
+}
+
+.cp-textarea {
+  resize: vertical;
+  min-height: 105px;
+}
+
+.cp-alert {
+  padding: 0.95rem 1.2rem;
+  border-radius: 14px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.cp-alert.success {
+  background: #edf8f0;
+  border: 1px solid #b6e2c3;
+  color: #1a6634;
+}
+
+.cp-alert.error {
+  background: #fdf2f2;
+  border: 1px solid #f8c8c8;
+  color: #9b1c1c;
+}
+
+.cp-form-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: stretch;
+  padding-top: 0.5rem;
+}
+
+@media (min-width: 640px) {
+  .cp-form-footer {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.cp-privacy {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  color: var(--body);
+}
+
+.cp-btn-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 0.95rem 2.2rem;
+  border-radius: 999px;
+  background: linear-gradient(120deg, #0b3f66, #0d7a8a);
+  color: #ffffff !important;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 14px 28px rgba(11, 63, 102, 0.28);
+  transition: all 0.25s ease;
+}
+
+.cp-btn-submit:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 36px rgba(11, 63, 102, 0.36);
+  background: linear-gradient(120deg, #083353, #0a6b79);
+}
+
+.cp-btn-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ---------------- Branch Accordions (Sandy Glass Theme) ---------------- */
+.cp-accordion-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.cp-branch-item {
+  border-radius: 18px;
+  border: 1.5px solid rgba(201, 162, 115, 0.4);
+  background: rgba(255, 255, 255, 0.7);
+  overflow: hidden;
+  transition: all 0.25s ease;
+}
+
+.cp-branch-item.open {
+  border-color: var(--tan);
+  background: #ffffff;
+  box-shadow: 0 10px 26px rgba(120, 90, 50, 0.12);
+}
+
+.cp-branch-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.15rem 1.35rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.2s;
+}
+
+.cp-branch-item.open .cp-branch-btn {
+  background: linear-gradient(120deg, #0b3f66, #0d7a8a);
+  color: #ffffff;
+}
+
+.cp-branch-btn-left {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.cp-branch-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: rgba(201, 162, 115, 0.22);
+  color: var(--deep);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
+.cp-branch-item.open .cp-branch-icon {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.cp-branch-name {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1rem;
+  font-weight: 800;
+  color: inherit;
+  margin-bottom: 0.2rem;
+}
+
+.cp-branch-tag {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--tan-d);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.cp-branch-item.open .cp-branch-tag {
+  color: #a7f3d0;
+}
+
+.cp-branch-toggle {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--deep);
+  transition: transform 0.2s;
+}
+
+.cp-branch-item.open .cp-branch-toggle {
+  color: #ffffff;
+}
+
+.cp-branch-body {
+  padding: 1.35rem 1.45rem 1.6rem;
+  border-top: 1px solid var(--line);
+  font-size: 0.92rem;
+  color: var(--body);
+  line-height: 1.65;
+}
+
+.cp-branch-meta {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.85rem;
+  margin: 1rem 0;
+  padding: 0.85rem 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+@media (min-width: 500px) {
+  .cp-branch-meta {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.cp-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.88rem;
+}
+
+.cp-meta-row strong {
+  color: var(--navy);
+}
+
+.cp-meta-row a {
+  color: var(--deep);
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.cp-meta-row a:hover {
+  text-decoration: underline;
+  color: var(--teal);
+}
+
+.cp-branch-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding-top: 0.5rem;
+}
+
+.cp-act-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.65rem 1.3rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cp-act-btn.primary {
+  background: linear-gradient(120deg, #0b3f66, #0d7a8a);
+  color: #fff;
+  border: none;
+  box-shadow: 0 6px 16px rgba(11, 63, 102, 0.22);
+}
+
+.cp-act-btn.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(11, 63, 102, 0.32);
+}
+
+/* ---------------- Unified Tamil Nadu Map (Right Column) ---------------- */
+.cp-right-col {
+  position: sticky;
+  top: 6rem;
+}
+
+.cp-tn-map-container {
+  position: relative;
+  width: 100%;
+  height: 480px;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1.5px solid var(--line);
+  background: #dcecef;
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.cp-tn-map-container iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+/* Location Pins */
+.cp-map-pin {
+  position: absolute;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 11px 6px 6px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.96);
+  color: var(--deep);
+  font-size: 12px;
+  font-weight: 800;
+  text-decoration: none;
+  box-shadow: 0 4px 16px rgba(120, 90, 50, 0.26);
+  border: 1.5px solid rgba(201, 162, 115, 0.6);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+}
+
+.cp-map-pin:hover,
+.cp-map-pin.active {
+  transform: translate(-50%, -50%) scale(1.08);
+  background: #ffffff;
+  border-color: var(--deep);
+  box-shadow: 0 8px 24px rgba(11, 63, 102, 0.35);
+  z-index: 10;
+  color: var(--teal);
+}
+
+.cp-pin-teardrop {
+  position: relative;
+  display: block;
+  flex: 0 0 22px;
+  width: 22px;
+  height: 22px;
+  border: 3.5px solid #ffffff;
+  border-radius: 50% 50% 50% 0;
+  background: #d74b31;
+  transform: rotate(-45deg);
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
+}
+
+.cp-pin-teardrop::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #fff;
+  transform: translate(-50%, -50%);
+}
+
+.cp-pin-salem {
+  left: 54%;
+  top: 39%;
+}
+
+.cp-pin-coimbatore {
+  left: 20%;
+  top: 51%;
+}
+
+.cp-pin-dharmapuri {
+  left: 60%;
+  top: 31%;
+}
+
+/* Branch Quick Directory Cards Under the Unified Map */
+.cp-map-branches-legend {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.65rem;
+  margin-top: 1.15rem;
+}
+
+@media (min-width: 640px) {
+  .cp-map-branches-legend {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.cp-legend-card {
+  padding: 0.8rem 0.9rem;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid var(--line);
+  transition: all 0.2s;
+  text-decoration: none;
+  display: block;
+  cursor: pointer;
+}
+
+.cp-legend-card:hover {
+  background: #ffffff;
+  border-color: var(--tan);
+  box-shadow: 0 6px 16px rgba(120, 90, 50, 0.16);
+  transform: translateY(-2px);
+}
+
+.cp-legend-card-title {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--navy);
+  margin-bottom: 0.15rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.cp-legend-card-phone {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--deep);
+}
+
+/* ---------------- Helpline Card (Home Deep Blue / Teal Gradient) ---------------- */
+.cp-helpline-card {
+  background: linear-gradient(135deg, #0b3f66 0%, #10597d 55%, #0d7a8a 100%);
+  border-radius: 28px;
+  padding: 2rem;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 20px 45px rgba(11, 63, 102, 0.3);
+}
+
+.cp-help-head {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-bottom: 1.25rem;
+}
+
+.cp-help-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #a5f3fc;
+  flex-shrink: 0;
+}
+
+.cp-help-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+}
+
+.cp-help-sub {
+  font-size: 0.76rem;
+  color: #cffafe;
+  margin: 0;
+}
+
+.cp-help-num-box {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 18px;
+  padding: 1.15rem 1.35rem;
+  margin-bottom: 1.25rem;
+}
+
+.cp-help-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #cffafe;
+  margin-bottom: 0.25rem;
+}
+
+.cp-help-num {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.75rem;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+}
+
+.cp-help-num a {
+  color: #ffffff;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.cp-help-num a:hover {
+  color: #a5f3fc;
+}
+
+.cp-help-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.cp-help-stat {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  padding: 0.8rem 0.9rem;
+  font-size: 0.76rem;
+}
+
+.cp-help-stat-title {
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 0.15rem;
+}
+
+.cp-help-stat-val {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.cp-btn-demo {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.95rem 1.6rem;
+  border-radius: 999px;
+  font: 700 0.85rem 'Outfit', sans-serif;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  color: var(--deep);
+  background: linear-gradient(160deg, #fffdf9, #f1e5d1);
+  border: 1.5px solid var(--tan);
+  box-shadow: 0 8px 20px rgba(120, 90, 50, 0.18);
+  transition: all 0.25s ease;
+}
+
+.cp-btn-demo:hover {
+  transform: translateY(-2px);
+  border-color: #ffffff;
+  box-shadow: 0 14px 28px rgba(120, 90, 50, 0.28);
+}

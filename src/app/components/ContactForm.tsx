@@ -80,57 +80,60 @@ export const ContactForm: React.FC<ContactFormProps> = ({ initialService = '', o
               </p>
             </div>
 
-            <div className="space-y-6">
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-xl bg-sky-500/10 border border-sky-400/20 flex items-center justify-center text-sky-400 shrink-0">
-                  <Phone className="w-5 h-5" />
+              <div className="space-y-6">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-400/20 flex items-center justify-center text-cyan-400 shrink-0">
+                    <Phone className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Direct Helpline</div>
+                    <a href="tel:9655577666" className="text-lg font-bold text-white hover:text-cyan-400 transition-colors">
+                      96555 77666 / 96555 99666
+                    </a>
+                    <div className="text-xs text-emerald-400 mt-0.5">24/7 Technical Service Desk</div>
+                  </div>
                 </div>
-                <div>
-                  <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Direct Hotline</div>
-                  <a href="tel:+919876543210" className="text-lg font-bold text-white hover:text-sky-400 transition-colors">
-                    +91 98765 43210
-                  </a>
-                  <div className="text-xs text-emerald-400 mt-0.5">24/7 Service Desk</div>
-                </div>
-              </div>
 
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-xl bg-sky-500/10 border border-sky-400/20 flex items-center justify-center text-sky-400 shrink-0">
-                  <Mail className="w-5 h-5" />
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-400/20 flex items-center justify-center text-cyan-400 shrink-0">
+                    <Mail className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Official Email</div>
+                    <a href="mailto:ceo@aakashaquatech.in" className="text-base font-bold text-white hover:text-cyan-400 transition-colors">
+                      ceo@aakashaquatech.in
+                    </a>
+                    <div className="text-xs text-slate-400 mt-0.5">Direct Response from Technical Desk</div>
+                  </div>
                 </div>
-                <div>
-                  <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Email Inquiry</div>
-                  <a href="mailto:info@aakashaquatech.com" className="text-base font-bold text-white hover:text-sky-400 transition-colors">
-                    info@aakashaquatech.com
-                  </a>
-                  <div className="text-xs text-slate-400 mt-0.5">Response within 2 hours</div>
-                </div>
-              </div>
 
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-xl bg-sky-500/10 border border-sky-400/20 flex items-center justify-center text-sky-400 shrink-0">
-                  <MapPin className="w-5 h-5" />
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-400/20 flex items-center justify-center text-cyan-400 shrink-0">
+                    <MapPin className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Head Office & Showroom</div>
+                    <div className="text-sm text-slate-300 mt-0.5 leading-snug">
+                      10/62C, BrindavanRoad, 1st Cross (Behind Dr.Sudamani Hospital), Fairlands, Salem - 636016, Tamil Nadu
+                    </div>
+                    <div className="text-xs text-slate-400 mt-1">
+                      <strong>Branches:</strong> Coimbatore • Dharmapuri
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Factory & Corporate Office</div>
-                  <div className="text-sm text-slate-300 mt-0.5 leading-snug">
-                    Plot No. 42, Industrial Area, Phase II, Hyderabad, Telangana, India
+
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-400/20 flex items-center justify-center text-cyan-400 shrink-0">
+                    <Clock className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Showroom & Service Hours</div>
+                    <div className="text-sm text-slate-300 mt-0.5">
+                      Monday - Sunday: 9:00 AM - 8:00 PM (Emergency 24/7)
+                    </div>
                   </div>
                 </div>
               </div>
-
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-xl bg-sky-500/10 border border-sky-400/20 flex items-center justify-center text-sky-400 shrink-0">
-                  <Clock className="w-5 h-5" />
-                </div>
-                <div>
-                  <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Operational Hours</div>
-                  <div className="text-sm text-slate-300 mt-0.5">
-                    Monday - Saturday: 9:00 AM - 7:00 PM
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
 
           {/* Form Column */}

@@ -1,131 +1,160 @@
-import React from 'react';
-import { ShieldCheck, Award, Wrench, Droplet, ArrowRight, CheckCircle2 } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { ChevronLeft, ChevronRight, ArrowRight, ShieldCheck } from 'lucide-react';
 
 interface HeroProps {
   onOpenQuote: () => void;
+  onExploreProducts: () => void;
 }
 
-export const Hero: React.FC<HeroProps> = ({ onOpenQuote }) => {
+export const Hero: React.FC<HeroProps> = ({ onOpenQuote, onExploreProducts }) => {
+  const slides = [
+    {
+      id: 1,
+      image: 'https://aakashaquatech.in/wp-content/uploads/2026/07/ChatGPT-Image-Jul-1-2026-at-10_40_36-PM.png',
+      alt: 'Aakash Aqua Tech - Pure Living Water Purifiers',
+      title: 'Revolutionary Pure Water Technology',
+      subtitle: 'South India’s Leading Multi-Brand Store for Sales & 24hr Engineering Service',
+      badge: 'Certified 7-Stage RO + UV + Alkaline'
+    },
+    {
+      id: 2,
+      image: 'https://aakashaquatech.in/wp-content/uploads/2026/07/ChatGPT-Image-Jul-1-2026-at-10_36_28-PM.png',
+      alt: 'Commercial & Industrial RO Plants',
+      title: 'Commercial & Industrial RO Plants',
+      subtitle: 'High Recovery 100 LPH to 10,000+ LPH Turnkey Installations',
+      badge: 'Turnkey Industrial Plants'
+    },
+    {
+      id: 3,
+      image: 'https://aakashaquatech.in/wp-content/uploads/2026/07/ChatGPT-Image-Jul-1-2026-at-10_33_47-PM.png',
+      alt: 'Advanced Home Water Softening Solutions',
+      title: 'Total Water Conditioning & Softeners',
+      subtitle: 'Protect Your Entire Home & Plumbing from Scaling & Hard Water',
+      badge: 'Zero Scaling & Soft Water'
+    },
+    {
+      id: 4,
+      image: 'https://aakashaquatech.in/wp-content/uploads/2026/07/ChatGPT-Image-Jul-1-2026-at-10_07_08-PM.png',
+      alt: 'Premium SS Water Dispensers',
+      title: 'Stainless Steel Water Dispensers',
+      subtitle: 'Trusted by ISRO, 16 Airports & Leading Global Tech Corporates',
+      badge: 'ISRO & Airport Trusted'
+    },
+    {
+      id: 5,
+      image: 'https://aakashaquatech.in/wp-content/uploads/2026/07/ChatGPT-Image-Jul-1-2026-at-06_20_16-PM.png',
+      alt: 'Rapid After-Sales & 24hr Technical Service',
+      title: 'Reliable 24-Hour Service & Genuine Spares',
+      subtitle: 'Over 35 Years of Environmental Water Engineering Expertise',
+      badge: '35+ Years of Trust'
+    }
+  ];
+
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+
+  useEffect(() => {
+    if (isPaused) return;
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [isPaused, slides.length]);
+
+  const handlePrev = () => {
+    setCurrentSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
+  };
+
+  const handleNext = () => {
+    setCurrentSlide((prev) => (prev + 1) % slides.length);
+  };
+
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-sky-50 via-white to-slate-50 pt-12 pb-20 lg:pt-20 lg:pb-32">
-      {/* Decorative background glow */}
-      <div className="absolute top-0 right-1/4 w-96 h-96 bg-sky-200/40 rounded-full blur-3xl pointer-events-none -z-0" />
-      <div className="absolute bottom-0 left-10 w-80 h-80 bg-cyan-100/50 rounded-full blur-2xl pointer-events-none -z-0" />
+    <section 
+      className="relative w-full overflow-hidden bg-slate-950"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
+      {/* Aspect Ratio Container for Responsive Slideshow */}
+      <div className="relative w-full h-[380px] sm:h-[480px] md:h-[580px] lg:h-[680px] select-none">
+        {slides.map((slide, index) => (
+          <div
+            key={slide.id}
+            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+              index === currentSlide ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'
+            }`}
+          >
+            <img
+              src={slide.image}
+              alt={slide.alt}
+              className="w-full h-full object-cover object-center"
+              loading={index === 0 ? 'eager' : 'lazy'}
+            />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          
-          {/* Left Column: Headline and CTAs */}
-          <div className="lg:col-span-7 space-y-6">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-sky-100/80 border border-sky-200 text-sky-800 text-xs font-bold tracking-wide uppercase">
-              <Award className="w-4 h-4 text-sky-600" />
-              ISO 9001:2015 Certified Water Treatment
-            </div>
-
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-[1.15]">
-              Engineered Water Purity For <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-600 to-cyan-500">Industry & Commerce</span>
-            </h1>
-
-            <p className="text-lg sm:text-xl text-slate-600 max-w-2xl leading-relaxed">
-              Design, manufacturing, installation, and AMC of high-recovery <strong>Industrial RO Plants</strong>, <strong>Commercial RO Systems</strong>, <strong>Water Softeners</strong>, and <strong>STP / ETP Plants</strong> tailored to your raw water chemistry.
-            </p>
-
-            {/* Feature Bullets */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-              <div className="flex items-center gap-2.5 text-slate-700 font-medium text-sm">
-                <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0" />
-                <span>Custom Flow Rates (250 LPH to 100,000 LPH)</span>
-              </div>
-              <div className="flex items-center gap-2.5 text-slate-700 font-medium text-sm">
-                <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0" />
-                <span>Heavy-Duty SS316 & Dow Filmtec Membranes</span>
-              </div>
-              <div className="flex items-center gap-2.5 text-slate-700 font-medium text-sm">
-                <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0" />
-                <span>Pollution Control Board & WHO Compliant</span>
-              </div>
-              <div className="flex items-center gap-2.5 text-slate-700 font-medium text-sm">
-                <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0" />
-                <span>Rapid On-Site 4-Hour Breakdown Support</span>
-              </div>
-            </div>
-
-            {/* CTAs */}
-            <div className="pt-4 flex flex-col sm:flex-row gap-4">
-              <button
-                onClick={onOpenQuote}
-                className="px-8 py-4 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-base shadow-lg shadow-sky-600/30 flex items-center justify-center gap-3 transition-all hover:scale-[1.02]"
-              >
-                <span>Request Free Water Audit & Quote</span>
-                <ArrowRight className="w-5 h-5" />
-              </button>
-
-              <a
-                href="#solutions"
-                className="px-8 py-4 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 text-slate-800 font-bold text-base flex items-center justify-center gap-2 transition-colors shadow-sm"
-              >
-                <span>Explore Water Plants</span>
-              </a>
-            </div>
-          </div>
-
-          {/* Right Column: Hero Graphic Card */}
-          <div className="lg:col-span-5">
-            <div className="relative rounded-3xl bg-gradient-to-tr from-sky-900 to-slate-900 p-8 text-white shadow-2xl overflow-hidden border border-sky-800/50">
-              {/* Background ambient water visual */}
-              <div className="absolute -right-10 -bottom-10 w-64 h-64 bg-sky-500/20 rounded-full blur-3xl pointer-events-none" />
-              
-              <div className="relative z-10 space-y-6">
-                <div className="flex items-center justify-between border-b border-sky-800/80 pb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-sky-500/20 border border-sky-400/30 flex items-center justify-center text-cyan-300">
-                      <Droplet className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <div className="text-sm font-semibold text-white">Aakash Plant Diagnostics</div>
-                      <div className="text-xs text-sky-300">Live Efficiency Benchmark</div>
-                    </div>
+            {/* Subtle Gradient Overlay for Text Readability & CTA interaction */}
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/30 to-transparent flex items-end">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16 w-full">
+                <div className="max-w-2xl text-white space-y-3.5 drop-shadow-md">
+                  <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-md text-white text-xs font-bold border border-cyan-400/40 shadow-lg">
+                    <ShieldCheck className="w-4 h-4 text-cyan-300" />
+                    <span className="text-cyan-100">{slide.badge}</span>
                   </div>
-                  <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                    Optimal Pure
-                  </span>
-                </div>
-
-                {/* Metrics */}
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="p-4 rounded-2xl bg-white/5 border border-white/10">
-                    <div className="text-xs text-slate-300 font-medium">TDS Reduction</div>
-                    <div className="text-2xl font-black text-cyan-400 mt-1">98.5%</div>
-                    <div className="text-[11px] text-slate-400 mt-0.5">Tested & Calibrated</div>
+                  <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
+                    {slide.title}
+                  </h1>
+                  <p className="text-sm sm:text-lg text-slate-200 font-medium leading-relaxed">
+                    {slide.subtitle}
+                  </p>
+                  <div className="pt-2 flex flex-wrap items-center gap-3">
+                    <button
+                      onClick={onOpenQuote}
+                      className="px-6 py-3 rounded-xl bg-[#2d737d] hover:bg-[#205860] text-white font-bold text-xs sm:text-sm shadow-xl shadow-cyan-900/40 flex items-center gap-2 transition-transform hover:scale-105 active:scale-95"
+                    >
+                      <span>Book Free Consultation</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={onExploreProducts}
+                      className="px-6 py-3 rounded-xl bg-white/95 hover:bg-white text-[#173238] font-bold text-xs sm:text-sm backdrop-blur-sm transition-transform hover:scale-105 active:scale-95 shadow-md"
+                    >
+                      <span>Explore Equipment</span>
+                    </button>
                   </div>
-                  <div className="p-4 rounded-2xl bg-white/5 border border-white/10">
-                    <div className="text-xs text-slate-300 font-medium">Water Recovery</div>
-                    <div className="text-2xl font-black text-cyan-400 mt-1">Up to 75%</div>
-                    <div className="text-[11px] text-slate-400 mt-0.5">High Efficiency Tech</div>
-                  </div>
-                </div>
-
-                <div className="space-y-3 pt-2">
-                  <div className="text-xs font-bold uppercase tracking-wider text-sky-300">Supported Industries</div>
-                  <div className="flex flex-wrap gap-2 text-xs">
-                    {['Pharmaceutical', 'Textiles & Dyeing', 'Hospitals', 'Commercial Tech Parks', 'Hotels & Resorts', 'Apartment Townships'].map((item) => (
-                      <span key={item} className="px-3 py-1 rounded-lg bg-sky-950/60 border border-sky-700/50 text-sky-200">
-                        {item}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="pt-4 border-t border-sky-800/80 flex items-center justify-between text-xs text-slate-300">
-                  <span className="flex items-center gap-1.5">
-                    <Wrench className="w-4 h-4 text-sky-400" /> Complete Turnkey Installation
-                  </span>
-                  <span className="font-semibold text-cyan-300">1 Year Warranty</span>
                 </div>
               </div>
             </div>
           </div>
+        ))}
 
+        {/* Carousel Arrow Controls */}
+        <button
+          onClick={handlePrev}
+          aria-label="Previous slide"
+          className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/40 hover:bg-black/70 text-white flex items-center justify-center backdrop-blur-md border border-white/20 transition-all hover:scale-110 active:scale-95"
+        >
+          <ChevronLeft className="w-6 h-6" />
+        </button>
+
+        <button
+          onClick={handleNext}
+          aria-label="Next slide"
+          className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/40 hover:bg-black/70 text-white flex items-center justify-center backdrop-blur-md border border-white/20 transition-all hover:scale-110 active:scale-95"
+        >
+          <ChevronRight className="w-6 h-6" />
+        </button>
+
+        {/* Carousel Dots Indicators */}
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
+          {slides.map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => setCurrentSlide(idx)}
+              aria-label={`Go to slide ${idx + 1}`}
+              className={`h-2.5 rounded-full transition-all duration-300 ${
+                idx === currentSlide ? 'w-8 bg-cyan-400' : 'w-2.5 bg-white/60 hover:bg-white'
+              }`}
+            />
+          ))}
         </div>
       </div>
     </section>

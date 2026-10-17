@@ -1,13 +1,18 @@
-﻿const fs = require('fs');
+const fs = require('fs');
 const path = require('path');
 
-const csvPath = 'C:/Users/pavid/Downloads/wc-product-export-30-9-2026-1790749178678.csv';
+const csvPath = 'C:/Users/pavid/Downloads/wc-product-export-12-10-2026-1791808696518.csv';
 const content = fs.readFileSync(csvPath, 'utf8');
 
 function parseCSV(text) {
   const lines = [];
   let row = [''];
   let inQuotes = false;
+  
+  // Strip BOM if present
+  if (text.charCodeAt(0) === 0xFEFF) {
+    text = text.slice(1);
+  }
   
   for (let i = 0; i < text.length; i++) {
     const c = text[i];
@@ -64,27 +69,19 @@ for (const v of variations) {
 const categoryTree = {};
 const allCategoryPaths = new Set();
 
+const parseCsvList = (s) => (s ? s.split(',').map(x => x.trim()).filter(Boolean) : []);
+
 const products = parents.map((p, idx) => {
   const id = p.ID || String(idx + 1);
   const vars = varByParent[id] || [];
 
   // Parse all images
-  const rawImages = (p.Images || '')
-    .split(',')
-    .map(u => u.trim())
-    .filter(u => u.length > 0);
-
-  // Featured main image is 1st image
+  const rawImages = parseCsvList(p.Images);
   const mainImage = rawImages[0] || 'https://images.unsplash.com/photo-1548839140-29a749e1bc4e?auto=format&fit=crop&w=800&q=80';
-  // Gallery images are all images or slice(1)
   const galleryImages = rawImages.length > 1 ? rawImages.slice(1) : [];
 
   // Parse categories with hierarchy
-  const rawCatList = (p.Categories || '')
-    .split(',')
-    .map(c => c.trim())
-    .filter(c => c.length > 0);
-
+  const rawCatList = parseCsvList(p.Categories);
   rawCatList.forEach(cp => allCategoryPaths.add(cp));
 
   const primaryCatPath = rawCatList[0] || 'Water Treatment';
@@ -102,6 +99,26 @@ const products = parents.map((p, idx) => {
     }
   }
 
+  // Brands
+  const rawBrands = parseCsvList(p.Brands);
+  let brand = rawBrands[0] || '';
+  if (!brand) {
+    const cLower = primaryCatPath.toLowerCase();
+    const nLower = (p.Name || '').toLowerCase();
+    if (cLower.includes('kent') || nLower.includes('kent')) brand = 'Kent';
+    else if (cLower.includes('ao smith') || nLower.includes('ao smith')) brand = 'AO SMITH';
+    else if (cLower.includes('zerob') || nLower.includes('zero b') || nLower.includes('zerob')) brand = 'ZeroB';
+    else if (cLower.includes('enviro') || nLower.includes('enviro')) brand = 'Enviro';
+    else if (cLower.includes('purella') || nLower.includes('purella')) brand = 'Purella';
+    else if (cLower.includes('aakash') || nLower.includes('aakash')) brand = 'Aakash Water Purifiers';
+    else if (cLower.includes('wave') || nLower.includes('wave')) brand = 'WAVE';
+    else if (cLower.includes('conway') || nLower.includes('conway')) brand = 'Conway SS Residential';
+    else if (cLower.includes('aquaguard') || nLower.includes('aquaguard')) brand = 'Aquaguard';
+  }
+
+  // Tags
+  const rawTags = parseCsvList(p.Tags);
+
   // Compute pricing
   let regularPrice = parseFloat(p['Regular price']) || 0;
   let salePrice = parseFloat(p['Sale price']) || 0;
@@ -110,7 +127,7 @@ const products = parents.map((p, idx) => {
 
   if (vars.length > 0) {
     const varPrices = vars
-      .map(v => parseFloat(v['Regular price']) || parseFloat(v['Sale price']) || 0)
+      .map(v => parseFloat(v['Sale price']) || parseFloat(v['Regular price']) || 0)
       .filter(pr => pr > 0);
     
     if (varPrices.length > 0) {
@@ -127,21 +144,36 @@ const products = parents.map((p, idx) => {
   for (let a = 1; a <= 5; a++) {
     const name = p[`Attribute ${a} name`];
     const vals = p[`Attribute ${a} value(s)`];
+    const vis = p[`Attribute ${a} visible`];
+    const glb = p[`Attribute ${a} global`];
+    const dflt = p[`Attribute ${a} default`];
     if (name && vals) {
       attributes.push({
         name: name.trim(),
-        values: vals.split(',').map(s => s.trim()).filter(Boolean)
+        values: parseCsvList(vals),
+        visible: vis === '1',
+        global: glb === '1',
+        default: (dflt || '').trim()
       });
     }
   }
 
-  // Format all variations so every single field is editable
+  // Format all variations
   const formattedVars = vars.map((v, vIdx) => {
-    const attr1Val = v['Attribute 1 value(s)'] || '';
-    const attr2Val = v['Attribute 2 value(s)'] || '';
-    const attr3Val = v['Attribute 3 value(s)'] || '';
-    
-    const attrLabel = [attr1Val, attr2Val, attr3Val].filter(Boolean).join(' | ') || `Option #${vIdx + 1}`;
+    const attrVals = {};
+    const labels = [];
+    for (let a = 1; a <= 5; a++) {
+      const aname = v[`Attribute ${a} name`] || p[`Attribute ${a} name`] || `attr${a}`;
+      const aval = (v[`Attribute ${a} value(s)`] || '').trim();
+      if (aval) {
+        attrVals[aname] = aval;
+        labels.push(aval);
+      }
+    }
+
+    const attrLabel = labels.join(' | ') || `Option #${vIdx + 1}`;
+    const vImages = parseCsvList(v.Images);
+    const vImg = vImages[0] || mainImage;
 
     return {
       id: v.ID || `${id}-var-${vIdx + 1}`,
@@ -151,48 +183,78 @@ const products = parents.map((p, idx) => {
       salePrice: parseFloat(v['Sale price']) || 0,
       inStock: v['In stock?'] === '1' || v['In stock?'] === '',
       stock: parseInt(v.Stock) || 10,
-      attributes: {
-        attr1: attr1Val,
-        attr2: attr2Val,
-        attr3: attr3Val
-      }
+      image: vImg,
+      images: vImages.length > 0 ? vImages : [vImg],
+      description: (v.Description || '').trim(),
+      weight: (v['Weight (kg)'] || '').trim(),
+      dimensions: {
+        length: (v['Length (cm)'] || '').trim(),
+        width: (v['Width (cm)'] || '').trim(),
+        height: (v['Height (cm)'] || '').trim()
+      },
+      attributes: attrVals
     };
   });
 
+  const name = (p.Name || '').trim();
+  const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+
   return {
     id: id,
-    name: p.Name,
-    slug: p.Name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
+    name: name,
+    slug: slug,
     type: vars.length > 0 ? 'variable' : (p.Type || 'simple'),
     sku: p.SKU || `AAT-${id}`,
+    gtin: (p['GTIN, UPC, EAN, or ISBN'] || '').trim(),
+    brand: brand,
+    brands: rawBrands.length > 0 ? rawBrands : (brand ? [brand] : []),
     category: primaryCatPath,
     parentCategory: parentCategory,
     childCategory: childCategory,
+    subCategory: subCategory,
     categories: rawCatList.length > 0 ? rawCatList : [primaryCatPath],
+    tags: rawTags,
     regularPrice: regularPrice,
     salePrice: salePrice,
     minPrice: minPrice,
     maxPrice: maxPrice,
+    dateSalePriceStarts: (p['Date sale price starts'] || '').trim(),
+    dateSalePriceEnds: (p['Date sale price ends'] || '').trim(),
+    taxStatus: (p['Tax status'] || 'taxable').trim(),
+    taxClass: (p['Tax class'] || '').trim(),
     inStock: p['In stock?'] === '1' || p['In stock?'] === '',
     stock: parseInt(p.Stock) || 10,
+    lowStockAmount: (p['Low stock amount'] || '').trim(),
+    backordersAllowed: p['Backorders allowed?'] === '1',
+    soldIndividually: p['Sold individually?'] === '1',
     featured: p['Is featured?'] === '1',
     published: p.Published !== '0',
-    publishDate: '2026-09-30 11:30:00',
+    visibility: (p['Visibility in catalog'] || 'visible').trim(),
+    allowReviews: p['Allow customer reviews?'] !== '0',
+    purchaseNote: (p['Purchase note'] || '').trim(),
+    shippingClass: (p['Shipping class'] || '').trim(),
+    externalUrl: (p['External URL'] || '').trim(),
+    buttonText: (p['Button text'] || '').trim(),
+    position: parseInt(p.Position) || 0,
+    upsells: parseCsvList(p.Upsells),
+    crossSells: parseCsvList(p['Cross-sells']),
+    groupedProducts: parseCsvList(p['Grouped products']),
+    publishDate: '2026-10-12 18:11:00',
     createdAt: '2026-06-15 10:00:00',
     updatedAt: new Date().toISOString(),
     mainImage: mainImage,
     galleryImages: galleryImages,
     images: rawImages.length > 0 ? rawImages : [mainImage],
-    shortDescription: p['Short description'] || '',
-    description: p.Description || '',
+    shortDescription: (p['Short description'] || '').trim(),
+    description: (p.Description || '').trim(),
     attributes: attributes,
     variationsCount: vars.length,
     variations: formattedVars,
-    weight: p['Weight (kg)'] || '',
+    weight: (p['Weight (kg)'] || '').trim(),
     dimensions: {
-      length: p['Length (cm)'] || '',
-      width: p['Width (cm)'] || '',
-      height: p['Height (cm)'] || ''
+      length: (p['Length (cm)'] || '').trim(),
+      width: (p['Width (cm)'] || '').trim(),
+      height: (p['Height (cm)'] || '').trim()
     }
   };
 });
@@ -214,4 +276,4 @@ const categoriesData = {
 fs.writeFileSync(path.join(dataDir, 'categories.json'), JSON.stringify(categoriesData, null, 2), 'utf8');
 fs.writeFileSync(path.join(srcDataDir, 'categories.json'), JSON.stringify(categoriesData, null, 2), 'utf8');
 
-console.log('Successfully imported and structured', products.length, 'products with gallery, dates, and variations!');
+console.log('Successfully imported and structured', products.length, 'products with full A to Z fields and variations!');

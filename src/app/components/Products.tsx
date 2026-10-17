@@ -1,88 +1,155 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { ProductItem } from '../services/api';
-import { Droplet, Check, ArrowRight, Gauge, Layers, Search, Package } from 'lucide-react';
+import { Search, ShoppingCart, ArrowRight, Filter, Sparkles, Check, ChevronDown } from 'lucide-react';
 
 interface ProductsProps {
   products: ProductItem[];
+  selectedCategory: string;
+  onSelectCategory: (category: string) => void;
   onSelectProduct: (product: ProductItem) => void;
+  onAddToCart: (product: ProductItem) => void;
 }
 
-export const Products: React.FC<ProductsProps> = ({ products, onSelectProduct }) => {
-  const [activeTab, setActiveTab] = useState<string>('all');
-  const [searchTerm, setSearchTerm] = useState<string>('');
-  const [visibleCount, setVisibleCount] = useState<number>(12);
+export const Products: React.FC<ProductsProps> = ({
+  products,
+  selectedCategory,
+  onSelectCategory,
+  onSelectProduct,
+  onAddToCart
+}) => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [sortBy, setSortBy] = useState<'featured' | 'price_asc' | 'price_desc' | 'name'>('featured');
+  const [visibleCount, setVisibleCount] = useState(20);
+  const [addedToast, setAddedToast] = useState<string | null>(null);
 
-  const categories = [
+  const categoryTabs = [
     { id: 'all', label: 'All Equipment' },
-    { id: 'Industrial RO', label: 'Industrial RO' },
     { id: 'Domestic RO', label: 'Domestic RO' },
-    { id: 'Water Softeners', label: 'Water Softeners' },
-    { id: 'Under Sink RO', label: 'Under Sink RO' },
-    { id: 'Water Dispensers', label: 'Water Dispensers' },
-    { id: 'FRP Vessels', label: 'FRP Vessels' },
-    { id: 'Spares & Consumables', label: 'Spares & Consumables' },
+    { id: 'SS WATER DISPENSER', label: 'SS Water Dispenser' },
+    { id: 'Industrial RO System', label: 'Commercial RO System' },
+    { id: 'Softner', label: 'Water Softeners' },
+    { id: 'Water Treatment', label: 'Water Treatment Plant' },
+    { id: 'Iron Remover Filter', label: 'Iron Remover' },
+    { id: 'Sand Filter', label: 'Sand Filter' },
+    { id: 'FRP Pressure Vessels', label: 'FRP Vessels' },
+    { id: 'SS Tanks', label: 'SS Tanks' },
+    { id: 'Alkaline', label: 'Alkaline' },
+    { id: 'Under Sink', label: 'Under Sink' },
+    { id: 'Spares', label: 'Spares' }
   ];
 
-  let filtered = activeTab === 'all' 
-    ? products 
-    : products.filter(p => (p.category || '').toLowerCase() === activeTab.toLowerCase());
+  // Filtering & Sorting
+  const filteredProducts = useMemo(() => {
+    let result = products;
 
-  if (searchTerm.trim()) {
-    const term = searchTerm.toLowerCase();
-    filtered = filtered.filter(p => 
-      p.name.toLowerCase().includes(term) || 
-      (p.sku && p.sku.toLowerCase().includes(term))
-    );
-  }
+    if (selectedCategory && selectedCategory !== 'all') {
+      const catLower = selectedCategory.toLowerCase();
+      result = result.filter(p => {
+        const primaryMatch = (p.category || '').toLowerCase().includes(catLower);
+        const arrayMatch = (p.categories || []).some(c => c.toLowerCase().includes(catLower));
+        return primaryMatch || arrayMatch;
+      });
+    }
 
-  const displayed = filtered.slice(0, visibleCount);
+    if (searchTerm.trim()) {
+      const q = searchTerm.toLowerCase();
+      result = result.filter(p =>
+        p.name.toLowerCase().includes(q) ||
+        (p.sku && p.sku.toLowerCase().includes(q)) ||
+        (p.shortDescription && p.shortDescription.toLowerCase().includes(q)) ||
+        (p.category && p.category.toLowerCase().includes(q))
+      );
+    }
+
+    // Sort
+    const sorted = [...result];
+    if (sortBy === 'price_asc') {
+      sorted.sort((a, b) => (a.regularPrice || 0) - (b.regularPrice || 0));
+    } else if (sortBy === 'price_desc') {
+      sorted.sort((a, b) => (b.regularPrice || 0) - (a.regularPrice || 0));
+    } else if (sortBy === 'name') {
+      sorted.sort((a, b) => a.name.localeCompare(b.name));
+    }
+
+    return sorted;
+  }, [products, selectedCategory, searchTerm, sortBy]);
+
+  const displayedProducts = filteredProducts.slice(0, visibleCount);
+
+  const handleAddToCart = (product: ProductItem, e: React.MouseEvent) => {
+    e.stopPropagation();
+    onAddToCart(product);
+    setAddedToast(`Added "${product.name.slice(0, 28)}..." to cart`);
+    setTimeout(() => setAddedToast(null), 3000);
+  };
 
   return (
-    <section id="solutions" className="py-20 bg-white">
+    <section id="catalog-section" className="py-20 bg-[#f5f8f9] border-t border-slate-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-4">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sky-50 border border-sky-100 text-sky-700 text-xs font-bold uppercase tracking-wider">
-            <Gauge className="w-3.5 h-3.5" />
-            Live Equipment Catalog ({products.length} Products)
+        <div className="text-center max-w-3xl mx-auto mb-10 space-y-3">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#eef6f7] text-[#2d737d] text-xs font-extrabold uppercase tracking-wider">
+            <Sparkles className="w-3.5 h-3.5 text-[#2d737d]" />
+            Official Product Catalog ({filteredProducts.length} Systems Available)
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-            High-Performance Water Treatment Systems
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#173238] tracking-tight">
+            Explore All Water Treatment & Purifier Systems
           </h2>
-          <p className="text-slate-600 text-base sm:text-lg">
-            Complete range of Industrial RO Plants, Commercial Softeners, Domestic Purifiers, and genuine spares imported directly from our engineering manufacturing line.
+          <p className="text-slate-500 text-sm sm:text-base leading-relaxed">
+            Multi-brand direct showroom inventory featuring certified Reverse Osmosis purifiers, softeners, dispensers, and industrial plant systems.
           </p>
         </div>
 
-        {/* Search & Category Filter */}
-        <div className="mt-10 space-y-4">
-          <div className="max-w-md mx-auto relative">
-            <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-            <input
-              type="text"
-              placeholder="Search products by model, capacity or SKU..."
-              value={searchTerm}
-              onChange={(e) => {
-                setSearchTerm(e.target.value);
-                setVisibleCount(12);
-              }}
-              className="w-full pl-10 pr-4 py-2.5 rounded-full border border-slate-200 bg-slate-50 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:bg-white shadow-sm transition-all"
-            />
+        {/* Search, Filter Bar and Sorting */}
+        <div className="bg-white p-4 sm:p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4 mb-10">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            
+            {/* Search Input */}
+            <div className="relative w-full md:w-96">
+              <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+              <input
+                type="text"
+                placeholder="Search models, brands (Kent, AO Smith, Conway), LPH..."
+                value={searchTerm}
+                onChange={(e) => {
+                  setSearchTerm(e.target.value);
+                  setVisibleCount(12);
+                }}
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#2d737d] focus:bg-white transition-all shadow-inner"
+              />
+            </div>
+
+            {/* Sorting Select */}
+            <div className="flex items-center gap-3 w-full md:w-auto justify-end">
+              <span className="text-xs font-bold text-slate-500 shrink-0">Sort By:</span>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as any)}
+                className="px-3 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 bg-white focus:outline-none focus:border-[#2d737d]"
+              >
+                <option value="featured">Featured / Recommended</option>
+                <option value="price_asc">Price: Low to High</option>
+                <option value="price_desc">Price: High to Low</option>
+                <option value="name">Product Name (A-Z)</option>
+              </select>
+            </div>
+
           </div>
 
-          <div className="flex items-center justify-center gap-2 overflow-x-auto pb-4 no-scrollbar">
-            {categories.map((tab) => (
+          {/* Category Tabs Carousel */}
+          <div className="flex items-center gap-2 overflow-x-auto pb-2 pt-1 no-scrollbar border-t border-slate-100">
+            {categoryTabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => {
-                  setActiveTab(tab.id);
+                  onSelectCategory(tab.id);
                   setVisibleCount(12);
                 }}
-                className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
-                  activeTab === tab.id
-                    ? 'bg-sky-600 text-white shadow-md shadow-sky-600/20'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
+                  (selectedCategory === tab.id || (tab.id === 'all' && (!selectedCategory || selectedCategory === 'all')))
+                    ? 'bg-[#1b3d4b] text-white shadow-md'
+                    : 'bg-[#eef6f7] text-[#2d737d] hover:bg-[#6f9ea6] hover:text-white'
                 }`}
               >
                 {tab.label}
@@ -91,103 +158,145 @@ export const Products: React.FC<ProductsProps> = ({ products, onSelectProduct })
           </div>
         </div>
 
-        {/* Products Grid */}
-        <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {displayed.map((item) => {
-            const priceDisplay = item.type === 'variable' && item.minPrice && item.maxPrice && item.minPrice !== item.maxPrice
-              ? `₹${item.minPrice.toLocaleString('en-IN')} - ₹${item.maxPrice.toLocaleString('en-IN')}`
-              : item.regularPrice > 0
-                ? `₹${item.regularPrice.toLocaleString('en-IN')}`
-                : 'Quote On Request';
+        {/* Product Grid - Exactly matching .aat-cat-products */}
+        {displayedProducts.length === 0 ? (
+          <div className="text-center py-16 bg-white rounded-3xl border border-slate-200 p-8 space-y-4">
+            <div className="w-16 h-16 rounded-full bg-[#eef6f7] flex items-center justify-center mx-auto text-[#2d737d]">
+              <Search className="w-8 h-8" />
+            </div>
+            <h3 className="text-lg font-bold text-[#173238]">No products found matching your search</h3>
+            <p className="text-sm text-slate-500 max-w-md mx-auto">
+              Try searching with different keywords or switch back to "All Equipment" to view all available systems.
+            </p>
+            <button
+              onClick={() => {
+                setSearchTerm('');
+                onSelectCategory('all');
+              }}
+              className="px-6 py-2.5 rounded-xl bg-[#2d737d] text-white text-xs font-bold shadow-md hover:bg-[#205860]"
+            >
+              Reset Filters
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {displayedProducts.map((product) => {
+              const bestPrice = product.salePrice && product.salePrice > 0 ? product.salePrice : product.regularPrice;
+              const hasMrp = product.salePrice && product.regularPrice > product.salePrice;
+              const mrpPrice = hasMrp ? product.regularPrice : Math.round((bestPrice || 12000) * 1.25);
 
-            return (
-              <div
-                key={item.id}
-                className="rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1"
-              >
-                <div>
-                  {/* Image Container */}
-                  <div className="relative h-48 bg-slate-100 overflow-hidden flex items-center justify-center p-4">
-                    {item.mainImage ? (
+              return (
+                <div
+                  key={product.id}
+                  className="aat-product-card relative flex flex-col justify-between rounded-xl bg-[#f5f5f5] border border-[#e2eaec] shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden hover:-translate-y-1 group"
+                >
+                  {/* On Sale Badge */}
+                  <span className="absolute top-3 right-3 z-10 px-2.5 py-1 rounded bg-[#e91e8c] text-white text-[11px] font-extrabold shadow-sm tracking-wide">
+                    SALE
+                  </span>
+
+                  {/* Image Link & Container */}
+                  <div>
+                    <div 
+                      onClick={() => onSelectProduct(product)}
+                      className="cursor-pointer relative w-full h-56 bg-white flex items-center justify-center p-4 overflow-hidden border-b border-slate-100"
+                    >
                       <img
-                        src={item.mainImage}
-                        alt={item.name}
-                        className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
+                        src={product.mainImage || 'https://aakashaquatech.in/wp-content/uploads/2026/03/Untitled-design-1-1.png'}
+                        alt={product.name}
+                        className="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300"
+                        loading="lazy"
                         onError={(e) => {
-                          (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1548839140-29a749e1bc4e?auto=format&fit=crop&w=800&q=80';
+                          (e.target as HTMLImageElement).src = 'https://aakashaquatech.in/wp-content/uploads/2026/03/Untitled-design-1-1.png';
                         }}
                       />
-                    ) : (
-                      <Package className="w-12 h-12 text-slate-300" />
-                    )}
-
-                    <span className="absolute top-3 left-3 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-white/90 text-sky-800 backdrop-blur-sm border border-slate-200 shadow-sm">
-                      {item.category || 'Water Treatment'}
-                    </span>
-
-                    {item.variationsCount && item.variationsCount > 0 ? (
-                      <span className="absolute bottom-2 right-2 px-2 py-0.5 rounded bg-purple-900/80 text-purple-200 text-[10px] font-medium backdrop-blur-sm">
-                        {item.variationsCount} Variations
-                      </span>
-                    ) : null}
-                  </div>
-
-                  <div className="p-5">
-                    <div className="text-[11px] font-mono text-slate-400 mb-1">
-                      {item.sku ? `SKU: ${item.sku}` : `ID: #${item.id}`}
                     </div>
 
-                    <h3 className="text-sm font-bold text-slate-900 group-hover:text-sky-600 transition-colors line-clamp-2 leading-snug">
-                      {item.name}
-                    </h3>
+                    {/* Summary Info */}
+                    <div className="p-4 sm:p-5 flex flex-col flex-1">
+                      
+                      {/* Categories Tag */}
+                      <div className="text-[10px] font-bold uppercase tracking-wider text-[#6f8c93] mb-1.5 line-clamp-1">
+                        {product.category || 'Water Purifier System'}
+                      </div>
 
-                    {item.shortDescription && (
-                      <p className="mt-2 text-slate-500 text-xs line-clamp-2 leading-relaxed">
-                        {item.shortDescription}
-                      </p>
-                    )}
+                      {/* Product Title */}
+                      <h3 
+                        onClick={() => onSelectProduct(product)}
+                        className="cursor-pointer text-sm sm:text-base font-extrabold text-[#132f36] group-hover:text-[#2d737d] transition-colors line-clamp-2 min-h-[42px] leading-snug mb-2"
+                      >
+                        {product.name}
+                      </h3>
 
-                    <div className="mt-4 pt-3 border-t border-slate-100 flex items-baseline justify-between">
-                      <div>
-                        <div className="text-[10px] text-slate-400 uppercase font-semibold">Estimated Price</div>
-                        <div className="text-base font-extrabold text-slate-900">
-                          {priceDisplay}
+                      {/* Excerpt */}
+                      {product.shortDescription && (
+                        <p className="text-xs text-[#405a60] line-clamp-2 leading-relaxed mb-3">
+                          {product.shortDescription}
+                        </p>
+                      )}
+
+                      {/* Price Section */}
+                      <div className="my-3 pt-2 border-t border-slate-200/60">
+                        {mrpPrice > 0 && (
+                          <div className="text-xs text-[#8a9ea3] font-medium line-through">
+                            MRP ₹{mrpPrice.toLocaleString('en-IN')}
+                          </div>
+                        )}
+                        <div className="text-[#2d737d] text-[11px] font-bold">Best Price:</div>
+                        <div className="text-lg sm:text-xl font-extrabold text-[#122f36]">
+                          {bestPrice > 0 ? `₹${bestPrice.toLocaleString('en-IN')}` : 'Price On Request'}
                         </div>
                       </div>
-                      <span className={`text-[11px] font-semibold ${item.inStock ? 'text-emerald-600' : 'text-amber-600'}`}>
-                        {item.inStock ? 'In Stock' : 'Call for Lead Time'}
-                      </span>
+
                     </div>
                   </div>
-                </div>
 
-                <div className="p-5 pt-0">
-                  <button
-                    onClick={() => onSelectProduct(item)}
-                    className="w-full py-2.5 rounded-xl bg-sky-50 hover:bg-sky-600 text-sky-700 hover:text-white text-xs font-bold transition-all flex items-center justify-center gap-1.5 shadow-sm"
-                  >
-                    <span>Request Specs & Pricing</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
+                  {/* Actions Grid (Buy Now & Add to Cart) */}
+                  <div className="p-4 pt-0 grid grid-cols-2 gap-2">
+                    <button
+                      onClick={() => onSelectProduct(product)}
+                      className="w-full py-2.5 px-2 rounded-lg bg-[#1b3d4b] hover:bg-[#2d737d] text-white text-xs font-extrabold text-center transition-colors shadow-sm"
+                    >
+                      Buy Now
+                    </button>
+                    <button
+                      onClick={(e) => handleAddToCart(product, e)}
+                      className="w-full py-2.5 px-2 rounded-lg bg-white hover:bg-[#2d737d] text-[#2d737d] hover:text-white border-2 border-[#2d737d] text-xs font-extrabold text-center transition-colors flex items-center justify-center gap-1 shadow-sm"
+                    >
+                      <ShoppingCart className="w-3.5 h-3.5" />
+                      <span>Add to Cart</span>
+                    </button>
+                  </div>
+
                 </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        )}
 
         {/* Load More Button */}
-        {filtered.length > visibleCount && (
+        {filteredProducts.length > visibleCount && (
           <div className="mt-12 text-center">
             <button
-              onClick={() => setVisibleCount(c => c + 16)}
-              className="px-8 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-sm font-bold shadow-md transition-all hover:scale-105"
+              onClick={() => setVisibleCount(c => c + 20)}
+              className="px-8 py-3.5 rounded-xl bg-[#1b3d4b] hover:bg-[#2d737d] text-white text-sm font-bold shadow-lg transition-all hover:scale-105"
             >
-              Load More Products ({filtered.length - visibleCount} remaining)
+              Load More Products ({filteredProducts.length - visibleCount} remaining)
             </button>
           </div>
         )}
 
       </div>
+
+      {/* Instant Toast Notification */}
+      {addedToast && (
+        <div className="fixed bottom-6 left-6 z-50 bg-[#173238] text-white px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 border border-slate-700 animate-in slide-in-from-bottom duration-200">
+          <div className="w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center text-white shrink-0">
+            <Check className="w-4 h-4" />
+          </div>
+          <span className="text-xs font-bold">{addedToast}</span>
+        </div>
+      )}
     </section>
   );
 };

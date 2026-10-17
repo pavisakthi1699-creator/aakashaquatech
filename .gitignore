@@ -14,3 +14,12 @@ backend/cache/*
 backend/uploads/*
 !backend/uploads/.gitkeep
 *.sqlite
+
+# Archives & build packages
+*.zip
+*.tar.gz
+
+# Scratch directory & backups
+scratch/
+*.backup.*
+

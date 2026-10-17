@@ -16,6 +16,10 @@
   background: linear-gradient(135deg, #0284c7 0%, #0369a1 50%, #075985 100%);
 }
 
+.font-trendy {
+  font-family: 'Outfit', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
 .glass-panel {
   background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(12px);
@@ -27,3 +31,255 @@
   background-image: radial-gradient(rgba(14, 165, 233, 0.15) 1px, transparent 1px);
   background-size: 24px 24px;
 }
+
+/* Section-by-section snap scrolling */
+.snap-screen {
+  scroll-snap-align: start;
+}
+
+/* Purifier Float & Ground Shadow Animation */
+@keyframes float-bounce {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-16px) rotate(0.4deg);
+  }
+}
+
+@keyframes shadow-scale {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.35;
+  }
+  50% {
+    transform: scale(0.82);
+    opacity: 0.16;
+  }
+}
+
+/* Water Wave Drift Animations */
+@keyframes water-drift-left {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1) rotate(0deg);
+  }
+  50% {
+    transform: translate(14px, -18px) scale(1.06) rotate(2deg);
+  }
+}
+
+@keyframes water-drift-right {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1) rotate(0deg);
+  }
+  50% {
+    transform: translate(-16px, -16px) scale(1.05) rotate(-2deg);
+  }
+}
+
+@keyframes bubble-rise {
+  0% {
+    transform: translateY(30px) scale(0.6);
+    opacity: 0;
+  }
+  40% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(-70px) scale(1.1);
+    opacity: 0;
+  }
+}
+
+.animate-float-bounce {
+  animation: float-bounce 3.6s ease-in-out infinite;
+}
+
+@keyframes float-rock {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(0.4deg);
+  }
+}
+
+.animate-float-rock {
+  animation: float-rock 4.5s ease-in-out infinite;
+}
+
+.animate-shadow-scale {
+  animation: shadow-scale 3.6s ease-in-out infinite;
+}
+
+.animate-water-left {
+  animation: water-drift-left 7s ease-in-out infinite;
+}
+
+.animate-water-right {
+  animation: water-drift-right 8s ease-in-out infinite;
+}
+
+@keyframes progress-fill {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+.animate-progress-fill {
+  animation: progress-fill linear forwards;
+}
+
+.font-trendy {
+  font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+}
+
+.font-brand-display {
+  font-family: 'Unbounded', 'Kanit', sans-serif;
+  font-weight: 800;
+}
+
+.font-hero-brand {
+  font-family: 'Montserrat', 'Syne', 'Outfit', sans-serif;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+
+.font-space {
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.font-bebas {
+  font-family: 'Bebas Neue', 'Barlow Condensed', sans-serif;
+  letter-spacing: 0.02em;
+}
+
+.font-anton {
+  font-family: 'Anton', 'Barlow Condensed', Impact, sans-serif;
+  letter-spacing: 0.01em;
+}
+
+@font-face {
+  font-family: 'Righteous';
+  src: url('/Righteous-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+.font-righteous {
+  font-family: 'Righteous', cursive, sans-serif;
+  letter-spacing: 0.02em;
+}
+
+.font-comfortaa {
+  font-family: 'Comfortaa', cursive, sans-serif;
+}
+
+.font-gruppo {
+  font-family: 'Gruppo', sans-serif;
+  letter-spacing: 0.04em;
+}
+
+/* Staggered Letter Reveal in 2 seconds */
+@keyframes letter-pop {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.92);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0px) scale(1);
+  }
+}
+
+.animate-letter {
+  display: inline-block;
+  opacity: 0;
+  animation: letter-pop 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Mouse Scroll Animation */
+@keyframes scroll-wheel {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(8px);
+    opacity: 0.2;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-scroll-wheel {
+  animation: scroll-wheel 1.8s ease-in-out infinite;
+}
+
+/* Animated Mouse Pointer Water Droplets & Ripples */
+@keyframes water-droplet-fade {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.85;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(0.2);
+    opacity: 0;
+  }
+}
+
+@keyframes water-ripple-expand {
+  0% {
+    width: 0px;
+    height: 0px;
+    opacity: 0.9;
+  }
+  100% {
+    width: 90px;
+    height: 90px;
+    opacity: 0;
+  }
+}
+
+.animate-water-droplet-fade {
+  animation: water-droplet-fade 0.5s ease-out forwards;
+}
+
+.animate-water-ripple-expand {
+  animation: water-ripple-expand 0.65s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+}
+
+/* 3D Mascot Floating Motion */
+@keyframes float-mascot {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(0.6deg);
+  }
+}
+
+.animate-float-mascot {
+  animation: float-mascot 4.2s ease-in-out infinite;
+}
+
+/* Shimmer Light Reflection */
+@keyframes shimmer-sweep {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(200%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer-sweep 3s ease-in-out infinite;
+}
+
